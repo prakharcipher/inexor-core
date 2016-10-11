@@ -51,6 +51,7 @@ namespace server {
         }
     }
 
+
     void shotevent::process(clientinfo *ci)
     {
         gamestate &gs = ci->state;

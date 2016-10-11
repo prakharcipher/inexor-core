@@ -3,11 +3,15 @@
 #include "inexor/server/server_enums.hpp"
 #include "inexor/server/server_stats.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/deprecated/vector_template.hpp"
+#include "inexor/server/server_clientinfo.hpp"
+
+#include "inexor/engine/engine.hpp"
 
 namespace inexor {
 namespace server {
 
-    struct clientinfo;
+    struct packetbuf;
 
     /// 
     struct servmode

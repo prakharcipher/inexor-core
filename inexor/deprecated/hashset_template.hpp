@@ -2,6 +2,7 @@
 
 #include "inexor/macros/memfree_macros.hpp"
 #include "inexor/macros/loop_macros.hpp"
+#include <algorithm>
 
 namespace inexor {
 namespace server {
@@ -240,7 +241,7 @@ namespace server {
 
         void unite (int x, int y)
         {
-            while(ufvals.length() <= max(x, y)) ufvals.add();
+            while(ufvals.length() <= std::max(x, y)) ufvals.add();
             x = compressfind(x);
             y = compressfind(y);
             if(x==y) return;

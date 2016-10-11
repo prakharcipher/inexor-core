@@ -45,6 +45,7 @@ namespace server {
         }
     }
 
+    extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
 
     bool pickup(int i, int sender)
     {

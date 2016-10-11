@@ -1,5 +1,6 @@
 #pragma once
 
+#include "inexor/engine/engine.hpp"
 
 namespace inexor {
 namespace server {

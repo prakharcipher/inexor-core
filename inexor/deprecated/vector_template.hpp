@@ -2,6 +2,8 @@
 
 #include "inexor/macros/define_null_macro.hpp"
 #include "inexor/macros/loop_macros.hpp"
+#include "inexor/deprecated/databuf_template.hpp"
+#include <assert.h>
 
 namespace inexor {
 namespace server {
@@ -136,8 +138,8 @@ namespace server {
         int length() const { return ulen; }
 
         /// [] array access operators
-        T &operator[](int i) { ASSERT(i>=0 && i<ulen); return buf[i]; }
-        const T &operator[](int i) const { ASSERT(i >= 0 && i<ulen); return buf[i]; }
+        T &operator[](int i) { assert(i>=0 && i<ulen); return buf[i]; }
+        const T &operator[](int i) const { assert(i >= 0 && i<ulen); return buf[i]; }
 
         /// resets all members to 0
         /// @warning This member does NOT clean up its memory!
@@ -148,9 +150,9 @@ namespace server {
         }
         
         /// shrink vector memory size AND DELETE UNUSED MEMORY
-        void shrink(int i) { ASSERT(i<=ulen); if(isclass<T>::no) ulen = i; else while(ulen>i) drop(); }
+        void shrink(int i) { assert(i<=ulen); if(isclass<T>::no) ulen = i; else while(ulen>i) drop(); }
         /// shrink vector memory size
-        void setsize(int i) { ASSERT(i<=ulen); ulen = i; }
+        void setsize(int i) { assert(i<=ulen); ulen = i; }
 
         void deletecontents() { while(!empty()) delete   pop(); }
         void deletearrays() { while(!empty()) delete[] pop(); }

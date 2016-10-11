@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/deprecated/cube2_vector.hpp"
+#include "inexor/deprecated/vector_template.hpp"
 
 #include "inexor/enumerations/enum_sound_ids.hpp"
 #include "inexor/enumerations/enum_hudicon_ids.hpp"
@@ -13,6 +13,9 @@
 #include "inexor/server/server_gameplay.hpp"
 
 #include "inexor/macros/gamemode_macros.hpp"
+
+#include <enet/enet.h>
+
 
 namespace inexor {
 namespace server {

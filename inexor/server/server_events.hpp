@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/deprecated/cube2_vector.hpp"
+#include "inexor/deprecated/vector_template.hpp"
 
 #include "inexor/enumerations/enum_gun_ids.hpp"
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
@@ -10,9 +10,15 @@
 #include "inexor/server/server_gamestate.hpp"
 #include "inexor/server/server_hitinfo.hpp"
 
+#include <enet/enet.h>
+
+#include "inexor/engine/engine.hpp"
+
 
 namespace inexor {
 namespace server {
+
+    extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
 
     /// pre-declaration
     struct clientinfo;

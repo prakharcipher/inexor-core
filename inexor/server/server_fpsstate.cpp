@@ -35,25 +35,25 @@ namespace server {
         bool fpsstate::canpickup(int type)
         {
             if(type<I_SHELLS || type>I_QUAD) return false;
-                itemstat &is = itemstats[type-I_SHELLS];
-                switch(type)
-                {
-                    case I_BOOST: return maxhealth<is.max;
-                    case I_HEALTH: return health<maxhealth;
-                        case I_GREENARMOUR:
-                            // (100h/100g only absorbs 200 damage)
-                            if(armourtype==A_YELLOW && armour>=100) return false;
-                    case I_YELLOWARMOUR: return !armourtype || armour<is.max;
-                    case I_QUAD: return quadmillis<is.max;
-                    case I_BOMBRADIUS:
-                        return bombradius<is.max;
-                        break;
-                    case I_BOMBDELAY:
-                        return bombdelay<is.max;
-                        break;
-                    default: return ammo[is.info]<is.max;
-                }
+            itemstat &is = itemstats[type-I_SHELLS];
+            switch(type)
+            {
+                case I_BOOST: return maxhealth<is.max;
+                case I_HEALTH: return health<maxhealth;
+                    case I_GREENARMOUR:
+                        // (100h/100g only absorbs 200 damage)
+                        if(armourtype==A_YELLOW && armour>=100) return false;
+                case I_YELLOWARMOUR: return !armourtype || armour<is.max;
+                case I_QUAD: return quadmillis<is.max;
+                case I_BOMBRADIUS:
+                    return bombradius<is.max;
+                    break;
+                case I_BOMBDELAY:
+                    return bombdelay<is.max;
+                    break;
+                default: return ammo[is.info]<is.max;
             }
+        }
 
         /// pick up this item
         void fpsstate::pickup(int type)

@@ -28,11 +28,9 @@ namespace server {
         rockets.reset();
         grenades.reset();
         bombs.reset();
-
         timeplayed = 0;
         effectiveness = 0;
         frags = flags = deaths = teamkills = shotdamage = damage = tokens = 0;
-
         lastdeath = 0;
         respawn();
     }

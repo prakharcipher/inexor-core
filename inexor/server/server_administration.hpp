@@ -4,13 +4,14 @@
 #include "inexor/macros/loop_macros.hpp"
 #include "inexor/enumerations/enum_bot_levels.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
-
-#include "inexor/deprecated/cube2_vector.hpp"
+#include "inexor/macros/type_definitions.hpp"
+#include "inexor/deprecated/vector_template.hpp"
 
 namespace inexor {
 namespace server {
 
     bool shouldcheckteamkills = false;
+    extern uint getclientip(int n);
 
     struct teamkillinfo
     {

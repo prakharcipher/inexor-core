@@ -47,7 +47,7 @@ namespace server {
 
     void startintermission()
     {
-        gamelimit = min(gamelimit, gamemillis);
+        gamelimit = std::min(gamelimit, gamemillis);
         checkintermission();
     }
 
@@ -154,7 +154,7 @@ namespace server {
                 int friends = 0, enemies = 0; // note: friends also includes the fragger
                 if(m_teammode) loopv(clients) if(strcmp(clients[i]->team, actor->team)) enemies++; else friends++;
                 else { friends = 1; enemies = clients.length()-1; }
-                actor->state.effectiveness += fragvalue*friends/float(max(enemies, 1));
+                actor->state.effectiveness += fragvalue*friends/float(std::max(enemies, 1));
             }
             teaminfo *t = m_teammode ? teaminfos.access(actor->team) : NULL;
             if(t) t->frags += fragvalue; 

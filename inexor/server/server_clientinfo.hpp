@@ -6,14 +6,23 @@
 #include "inexor/macros/memfree_macros.hpp"
 #include "inexor/enumerations/enum_admin_levels.hpp"
 #include "inexor/macros/define_null_macro.hpp"
+
 #include <enet/enet.h>
+#include <algorithm>
+
+#include "inexor/server/server_gamestate.hpp"
+
+#include "inexor/deprecated/vector_template.hpp"
 
 
 namespace inexor {
 namespace server {
 
+    extern int gamemillis, nextexceeded;
+    extern ENetPeer *getclientpeer(int i);
+    extern void freechallenge(void *answer);
+
     struct gameevent;
-    struct gamestate;
 
     /// 
     struct clientinfo

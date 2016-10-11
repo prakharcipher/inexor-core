@@ -4,6 +4,9 @@
 #include "inexor/server/server_fpsstate.hpp"
 #include "inexor/enumerations/enum_client_states.hpp"
 
+// TODO: remove dependencies!
+#include "inexor/engine/engine.hpp"
+
 namespace inexor {
 namespace server {
 

@@ -3,6 +3,7 @@
 #include "inexor/server/server_enums.hpp"
 #include "inexor/server/server_teams.hpp"
 #include "inexor/server/server_core.hpp"
+#include "inexor/server/server_stats.hpp"
 
 #include "inexor/enumerations/enum_admin_levels.hpp"
 
@@ -11,10 +12,19 @@
 #include "inexor/server/server_hitinfo.hpp"
 #include "inexor/server/server_administration.hpp"
 
+#include "inexor/deprecated/hashset_template.hpp"
+
+#include <enet/enet.h>
+#include <algorithm>
+
+#include "inexor/macros/clamp_template.hpp"
 
 
 namespace inexor {
 namespace server {
+
+    /// 
+    #define MAXCLIENTS 128
 
     /// 
     static const int DEATHMILLIS = 300;
@@ -23,6 +33,8 @@ namespace server {
     extern int gamemode, gamemillis, gamelimit, nextexceeded, gamespeed, interm;
     extern bool notgotitems, shouldstep, gamepaused, teamspersisted;
     extern hashset<teaminfo> teaminfos;
+    extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
+    extern void *getclientinfo(int i);
 
     /// this structure will be declared below
     struct clientinfo;

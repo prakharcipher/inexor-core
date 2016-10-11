@@ -51,7 +51,7 @@ namespace server {
 
     void clientinfo::setpushed()
     {
-        pushed = max(pushed, gamemillis);
+        pushed = std::max(pushed, gamemillis);
         if(exceeded && checkpushed(exceeded, calcpushrange())) exceeded = 0;
     }
 
