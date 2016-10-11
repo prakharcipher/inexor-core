@@ -6,9 +6,10 @@
 #include "inexor/server/server_gameplay.hpp"
 #include "inexor/server/server_events.hpp"
 #include "inexor/server/server_macros.hpp"
-/// master mode
+
 #include "inexor/macros/mastermode_macros.hpp"
 
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
 using namespace inexor::server;
 
 
@@ -475,19 +476,6 @@ namespace server
         formatstring(cname[cidx], ci->state.aitype == AI_NONE ? "%s %s(%d)%s" : "%s %s[%d]%s", name, COL_MAGENTA, ci->clientnum, COL_WHITE);
         return cname[cidx];
     }
-
-    #define SERVMODE 1
-    #include "inexor/fpsgame/capture.hpp"
-    #include "inexor/fpsgame/ctf.hpp"
-    #include "inexor/fpsgame/collect.hpp"
-    #include "inexor/fpsgame/bomb.hpp"
-    #include "inexor/fpsgame/hideandseek.hpp"
-
-    captureservmode capturemode;
-    ctfservmode ctfmode;
-    collectservmode collectmode;
-    bombservmode bombmode;
-    hideandseekservmode hideandseekmode;
 
     static hashset<teaminfo> teaminfos;
 

@@ -5,7 +5,11 @@
 namespace inexor {
 namespace server {
 
-    gamestate::gamestate() : state(CS_DEAD), editstate(CS_DEAD), lifesequence(0) {}
+    gamestate::gamestate() : state(CS_DEAD),
+                             editstate(CS_DEAD),
+                             lifesequence(0)
+    {
+    }
 
     bool gamestate::isalive(int gamemillis)
     {
@@ -30,7 +34,6 @@ namespace server {
         frags = flags = deaths = teamkills = shotdamage = damage = tokens = 0;
 
         lastdeath = 0;
-
         respawn();
     }
 

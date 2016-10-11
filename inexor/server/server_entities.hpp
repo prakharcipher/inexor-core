@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/engine/engine.hpp"
+#include "inexor/deprecated/cube2_vector.hpp"
 
 #include "inexor/enumerations/enum_sound_ids.hpp"
 #include "inexor/enumerations/enum_hudicon_ids.hpp"

@@ -1,11 +1,9 @@
 #pragma once
 
-/// particle types
 #include "inexor/enumerations/enum_particle_types.hpp"
-/// sounds
 #include "inexor/enumerations/enum_sound_ids.hpp"
-/// guns
 #include "inexor/enumerations/enum_gun_ids.hpp"
+#include "inexor/macros/define_null_macro.hpp"
 
 
 namespace inexor {
@@ -27,14 +25,7 @@ namespace server {
     #define MAXTAGLEN 8    /// max player tag length
     #define BOTTAG "Bot"   /// all bots share this tag
 
-    /// 0
-    #ifndef NULL
-        #ifdef __cplusplus
-            #define NULL 0
-        #else
-            #define NULL ((void *)0)
-        #endif
-    #endif
+
 
     /// 
     static const struct guninfo

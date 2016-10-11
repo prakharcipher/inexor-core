@@ -5,7 +5,6 @@
 
 #ifdef SERVMODE
 
-
 extern void sendspawn(clientinfo *ci);
 
 struct bombservmode : servmode

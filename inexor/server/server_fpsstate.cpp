@@ -4,7 +4,12 @@ namespace inexor {
 namespace server {
 
 
-        fpsstate::fpsstate() : maxhealth(100), aitype(AI_NONE), skill(0), backupweapon(GUN_FIST) {}
+        fpsstate::fpsstate() : maxhealth(100),
+                                aitype(AI_NONE),
+                                skill(0),
+                                backupweapon(GUN_FIST)
+        {
+        }
 
         /// set initial ammo
         void fpsstate::baseammo(int gun, int k, int scale)
@@ -128,10 +133,10 @@ namespace server {
                 armour = 100;
                 ammo[GUN_PISTOL] = 40;
                 backupweapon = GUN_FIST;
-                int spawngun1 = rnd(5)+1, spawngun2;
+                int spawngun1 = ::inexor::util::rnd(5)+1, spawngun2;
                 gunselect = spawngun1;
                 baseammo(spawngun1, m_noitems ? 2 : 1);
-                do spawngun2 = rnd(5)+1; while(spawngun1==spawngun2);
+                do spawngun2 = ::inexor::util::rnd(5)+1; while(spawngun1==spawngun2);
                 baseammo(spawngun2, m_noitems ? 2 : 1);
                 if(m_noitems) ammo[GUN_GL] += 1;
             }

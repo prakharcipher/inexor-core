@@ -1,15 +1,19 @@
 #pragma once
 
 #include "inexor/macros/deprecated_string_macro.hpp"
-#include "inexor/server/server_gamestate.hpp"
+#include "inexor/macros/type_definitions.hpp" // uchar
+#include "inexor/enumerations/enum_client_states.hpp"
+#include "inexor/macros/memfree_macros.hpp"
 #include "inexor/enumerations/enum_admin_levels.hpp"
+#include "inexor/macros/define_null_macro.hpp"
+#include <enet/enet.h>
+
 
 namespace inexor {
 namespace server {
 
-    extern int nextexceeded;
-
     struct gameevent;
+    struct gamestate;
 
     /// 
     struct clientinfo

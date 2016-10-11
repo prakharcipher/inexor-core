@@ -2,12 +2,12 @@
 
 #include "inexor/server/server_enums.hpp"
 #include "inexor/server/server_stats.hpp"
-#include "inexor/server/server_clientinfo.hpp"
-
 #include "inexor/macros/gamemode_macros.hpp"
 
 namespace inexor {
 namespace server {
+
+    struct clientinfo;
 
     /// 
     struct servmode

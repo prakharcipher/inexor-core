@@ -5,16 +5,12 @@
 #include "inexor/server/server_core.hpp"
 
 #include "inexor/enumerations/enum_admin_levels.hpp"
-#include "inexor/enumerations/enum_client_states.hpp"
 
-/// struct clientinfo
 #include "inexor/server/server_clientinfo.hpp"
-/// struct gamestate
 #include "inexor/server/server_gamestate.hpp"
-/// struct hitinfo
 #include "inexor/server/server_hitinfo.hpp"
-// addteamkill
 #include "inexor/server/server_administration.hpp"
+
 
 
 namespace inexor {

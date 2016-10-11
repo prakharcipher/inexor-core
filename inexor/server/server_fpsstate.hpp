@@ -10,6 +10,9 @@
 #include "inexor/enumerations/enum_bot_levels.hpp"
 #include "inexor/enumerations/enum_entity_types.hpp"
 
+#include "inexor/util/random.hpp"
+
+
 namespace inexor {
 namespace server {
 
