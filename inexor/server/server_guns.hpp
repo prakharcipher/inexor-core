@@ -5,27 +5,8 @@
 #include "inexor/enumerations/enum_gun_ids.hpp"
 #include "inexor/macros/define_null_macro.hpp"
 
-
 namespace inexor {
 namespace server {
-    
-   
-    /// TODO: remove this duplicated code
-    #define EXP_DISTSCALE 1.5f
-    #define EXP_SELFDAMDIV 2
-
-    #define DMF 16.0f   /// for world locations
-    #define DNF 100.0f  /// for normalized vectors
-    #define DVELF 1.0f  /// for playerspeed based velocity vectors
-
-    /// important teamspecific declarations
-    #define MAXTEAMS 128
-    #define MAXNAMELEN 15  /// max player name length
-    #define MAXTEAMLEN 4   /// max team name length
-    #define MAXTAGLEN 8    /// max player tag length
-    #define BOTTAG "Bot"   /// all bots share this tag
-
-
 
     /// 
     static const struct guninfo
@@ -53,7 +34,6 @@ namespace server {
         { S_FEXPLODE,  375, 200,   8,  20,  0, 1024,  1, 150,  40, 1500, "bomb_splinter",   NULL,              0 },
 
     };
-
 
 };
 };

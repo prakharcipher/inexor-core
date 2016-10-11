@@ -1,7 +1,7 @@
 #pragma once
 
 #include "inexor/server/server_projectilestate.hpp"
-#include "inexor/server/server_fpsstate.hpp"
+//#include "inexor/server/server_fpsstate.hpp"
 #include "inexor/enumerations/enum_client_states.hpp"
 
 // TODO: remove dependencies!

@@ -1,23 +1,23 @@
 #pragma once
 
-#include "inexor/server/server_enums.hpp"
+#include "inexor/server/server_guns.hpp"
 #include "inexor/server/server_teams.hpp"
 #include "inexor/server/server_core.hpp"
 #include "inexor/server/server_stats.hpp"
-
-#include "inexor/enumerations/enum_admin_levels.hpp"
-
 #include "inexor/server/server_clientinfo.hpp"
 #include "inexor/server/server_gamestate.hpp"
 #include "inexor/server/server_hitinfo.hpp"
 #include "inexor/server/server_administration.hpp"
 
+#include "inexor/enumerations/enum_admin_levels.hpp"
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
+
 #include "inexor/deprecated/hashset_template.hpp"
+
+#include "inexor/macros/clamp_template.hpp"
 
 #include <enet/enet.h>
 #include <algorithm>
-
-#include "inexor/macros/clamp_template.hpp"
 
 
 namespace inexor {

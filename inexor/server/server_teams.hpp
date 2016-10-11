@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/server/server_enums.hpp"
+#include "inexor/macros/constants.hpp"
 
 namespace inexor {
 namespace server {

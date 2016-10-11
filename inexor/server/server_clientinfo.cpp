@@ -3,6 +3,7 @@
 namespace inexor {
 namespace server {
 
+
     clientinfo::clientinfo() : getdemo(NULL),
                                getmap(NULL),
                                clipboard(NULL),

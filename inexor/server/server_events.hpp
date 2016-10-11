@@ -9,16 +9,22 @@
 #include "inexor/server/server_clientinfo.hpp"
 #include "inexor/server/server_gamestate.hpp"
 #include "inexor/server/server_hitinfo.hpp"
+#include "inexor/server/server_guns.hpp"
+#include "inexor/server/server_entities.hpp"
 
-#include <enet/enet.h>
+#include "inexor/macros/constants.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
 
 #include "inexor/engine/engine.hpp"
+
+#include <enet/enet.h>
 
 
 namespace inexor {
 namespace server {
 
     extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
+    extern clientinfo *getinfo(int n);
 
     /// pre-declaration
     struct clientinfo;

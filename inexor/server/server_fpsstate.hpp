@@ -1,8 +1,6 @@
 #pragma once
 
-#include <algorithm>
-
-#include "inexor/server/server_enums.hpp"
+#include "inexor/server/server_guns.hpp"
 #include "inexor/server/server_gamemodes.hpp"
 #include "inexor/server/server_entities.hpp"
 #include "inexor/server/server_macros.hpp"
@@ -10,7 +8,11 @@
 #include "inexor/enumerations/enum_bot_levels.hpp"
 #include "inexor/enumerations/enum_entity_types.hpp"
 
+#include "inexor/enumerations/enum_gun_ids.hpp"
+
 #include "inexor/util/random.hpp"
+
+#include <algorithm>
 
 
 namespace inexor {
@@ -29,7 +31,14 @@ namespace server {
         int bombradius;
         int bombdelay;
 
-        fpsstate();
+        //fpsstate();
+        fpsstate() : maxhealth(100),
+                     aitype(AI_NONE),
+                     skill(0),
+                     backupweapon(GUN_FIST)
+        {
+        }
+
 
         /// set initial ammo
         void baseammo(int gun, int k = 2, int scale = 1);

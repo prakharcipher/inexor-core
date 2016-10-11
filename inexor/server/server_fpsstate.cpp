@@ -4,13 +4,6 @@ namespace inexor {
 namespace server {
 
 
-        fpsstate::fpsstate() : maxhealth(100),
-                                aitype(AI_NONE),
-                                skill(0),
-                                backupweapon(GUN_FIST)
-        {
-        }
-
         /// set initial ammo
         void fpsstate::baseammo(int gun, int k, int scale)
         {

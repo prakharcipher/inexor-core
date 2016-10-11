@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/server/server_enums.hpp"
+#include "inexor/server/server_guns.hpp"
 #include "inexor/server/server_stats.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
 #include "inexor/deprecated/vector_template.hpp"
