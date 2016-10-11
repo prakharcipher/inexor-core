@@ -1,10 +1,10 @@
 #pragma once
 
 #include "inexor/server/server_enums.hpp"
-/// struct teamscore
 #include "inexor/server/server_stats.hpp"
-/// struct clientinfo
 #include "inexor/server/server_clientinfo.hpp"
+
+#include "inexor/macros/gamemode_macros.hpp"
 
 namespace inexor {
 namespace server {

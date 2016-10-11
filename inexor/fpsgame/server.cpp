@@ -96,7 +96,6 @@ namespace server
     }
 
     string smapname = "";
-    int interm = 0;
     enet_uint32 lastsend = 0;
     int mastermode = MM_OPEN, mastermask = MM_PRIVSERV;
     stream *mapdata = NULL;
@@ -367,28 +366,6 @@ namespace server
     COMMAND(teamkillkickreset, "");
     COMMANDN(teamkillkick, addteamkillkick, "sii");
 
-    struct teamkillinfo
-    {
-        uint ip;
-        int teamkills;
-    };
-    vector<teamkillinfo> teamkills;
-    bool shouldcheckteamkills = false;
-
-    void addteamkill(clientinfo *actor, clientinfo *victim, int n)
-    {
-        if(!m_timed || actor->state.aitype != AI_NONE || actor->local || actor->privilege || (victim && victim->state.aitype != AI_NONE)) return;
-        shouldcheckteamkills = true;
-        uint ip = getclientip(actor->clientnum);
-        loopv(teamkills) if(teamkills[i].ip == ip) 
-        { 
-            teamkills[i].teamkills += n;
-            return;
-        }
-        teamkillinfo &tk = teamkills.add();
-        tk.ip = ip;
-        tk.teamkills = n;
-    }
 
     void checkteamkills()
     {
@@ -481,17 +458,6 @@ namespace server
         resetitems();
     }
 
-    int numclients(int exclude = -1, bool nospec = true, bool noai = true, bool priv = false)
-    {
-        int n = 0;
-        loopv(clients) 
-        {
-            clientinfo *ci = clients[i];
-            if(ci->clientnum!=exclude && (!nospec || ci->state.state!=CS_SPECTATOR || (priv && (ci->privilege || ci->local))) && (!noai || ci->state.aitype == AI_NONE)) n++;
-        }
-        return n;
-    }
-
     bool duplicatename(clientinfo *ci, const char *name)
     {
         if(!name) name = ci->name;
@@ -522,52 +488,6 @@ namespace server
     collectservmode collectmode;
     bombservmode bombmode;
     hideandseekservmode hideandseekmode;
-
-    bool canspawnitem(int type) {
-    	if(m_bomb) return (type>=I_BOMBS && type<=I_BOMBDELAY);
-    	else return !m_noitems && (type>=I_SHELLS && type<=I_QUAD && (!m_noammo || type<I_SHELLS || type>I_CARTRIDGES));
-    }
-
-    int spawntime(int type)
-    {
-        if(m_classicsp) return INT_MAX;
-        int np = numclients(-1, true, false);
-        np = np<3 ? 4 : (np>4 ? 2 : 3);         // spawn times are dependent on number of players
-        int sec = 0;
-        switch(type)
-        {
-            case I_SHELLS:
-            case I_BULLETS:
-            case I_ROCKETS:
-            case I_ROUNDS:
-            case I_GRENADES:
-            case I_CARTRIDGES: sec = np*4; break;
-            case I_BOMBS:
-            case I_BOMBRADIUS: sec = np*9; break;
-            case I_BOMBDELAY: sec = np*7; break;
-            case I_HEALTH: sec = np*5; break;
-            case I_GREENARMOUR: sec = 20; break;
-            case I_YELLOWARMOUR: sec = 30; break;
-            case I_BOOST: sec = 60; break;
-            case I_QUAD: sec = 70; break;
-        }
-        return sec*1000;
-    }
-
-    bool delayspawn(int type)
-    {
-        switch(type)
-        {
-            case I_GREENARMOUR:
-            case I_YELLOWARMOUR:
-                return !m_classicsp;
-            case I_BOOST:
-            case I_QUAD:
-                return true;
-            default:
-                return false;
-        }
-    }
 
     static hashset<teaminfo> teaminfos;
 
@@ -938,14 +858,6 @@ namespace server
     }
 
     bool ispaused() { return gamepaused; }
-
-    void changegamespeed(int val, clientinfo *ci = NULL)
-    {
-        val = clamp(val, 10, 1000);
-        if(gamespeed==val) return;
-        gamespeed = val;
-        sendf(-1, 1, "riii", N_GAMESPEED, gamespeed, ci ? ci->clientnum : -1);
-    }
 
     void forcegamespeed(int speed)
     {
@@ -1840,81 +1752,12 @@ namespace server
         }
     }
 
-    void checkintermission()
-    {
-        if(gamemillis >= gamelimit && !interm && !m_timeforward)
-        {
-            sendf(-1, 1, "ri2", N_TIMEUP, 0);
-            if(smode) smode->intermission();
-            changegamespeed(100);
-            interm = gamemillis + 10000;
-        }
-    }
-
-    void startintermission()
-    {
-        gamelimit = min(gamelimit, gamemillis);
-        checkintermission();
-    }
-
     void forceintermission()
     {
         if(interm) return;
         interm = gamemillis + 10000;
         sendf(-1, 1, "ri2", N_TIMEUP, 0);
         if(smode) smode->intermission();
-    }
-
-    ///
-    // Checks if the game has ended because only one player is still alive.
-    // It does this by checking if less than 2 players have their state set to alive.
-    // This means, the game will also end if someone is gagging
-    // If only one is still alive this method forces intermission.
-    ///
-    void checklms()
-    {
-        if(m_teammode)
-        {
-            int teamsalive = 0;
-            vector<teamscore> teams;
-            for(int cn=0; cn<clients.length(); cn++)
-            {
-                bool found = false;
-                for(int t=0; t<teams.length(); t++)
-                {
-                    if(strcmp(teams[t].team, clients[cn]->team) == 0)
-                    {
-                        found = true;
-                        if(clients[cn]->state.state == CS_ALIVE) teams[t].score++;
-                        break;
-                    }
-                }
-                if(!found) teams.add(teamscore(clients[cn]->team, (clients[cn]->state.state == CS_ALIVE) ? 1 : 0));
-            }
-            for(int t=0; t<teams.length(); t++)
-            {
-                if(teams[t].score > 0) teamsalive++;
-            }
-            if(teamsalive < 2) startintermission();
-        }
-        else
-        {
-            int plalive = 0;  // Number of players still alive;
-                              // n > 1 Means the game is still running;
-                              // 1 means player x has won;
-                              // n < 1 means that the game should end, but there is now winner (probatly only,
-                              // if the two last players killed them self at the same time)
-            int clfound = -1; // The index of the client whose player is last found as alive, the winner. IF $plalive == 1
-                              // It is currently not used
-            // Get player check if players are alive; if yes set plfound and increase plalive
-            for (int clnum = 0; clnum < clients.length() && plalive < 2; clnum++)
-                if (clients[clnum]->state.state == CS_ALIVE) {
-                    plalive++;
-                    clfound = clnum;
-                }
-            // Stop game if less than 2 players are alive
-            if (plalive < 2) startintermission();
-        }
     }
 	
     bool gameevent::flush(clientinfo *ci, int fmillis)

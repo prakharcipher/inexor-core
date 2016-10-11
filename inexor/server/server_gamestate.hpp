@@ -3,8 +3,12 @@
 #include "inexor/server/server_projectilestate.hpp"
 #include "inexor/server/server_fpsstate.hpp"
 
+#include "inexor/enumerations/enum_client_states.hpp"
+
 namespace inexor {
 namespace server {
+
+    extern const int DEATHMILLIS;
 
     /// 
     struct gamestate : fpsstate

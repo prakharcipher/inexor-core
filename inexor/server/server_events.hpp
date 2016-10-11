@@ -1,13 +1,15 @@
 #pragma once
 
-#include "inexor/shared/tools.hpp"
-#include "inexor/server/server_clientinfo.hpp"
-/// guns
-#include "inexor/enumerations/enum_gun_ids.hpp"
-/// network messages
-#include "inexor/enumerations/enum_netmsg_ids.hpp"
+#include "inexor/engine/engine.hpp"
 
+#include "inexor/enumerations/enum_gun_ids.hpp"
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
+#include "inexor/enumerations/enum_client_states.hpp"
+
+#include "inexor/server/server_clientinfo.hpp"
 #include "inexor/server/server_gamestate.hpp"
+#include "inexor/server/server_hitinfo.hpp"
+
 
 namespace inexor {
 namespace server {

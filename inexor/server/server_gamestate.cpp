@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/server/server_gamestate.hpp"
+
 namespace inexor {
 namespace server {
 

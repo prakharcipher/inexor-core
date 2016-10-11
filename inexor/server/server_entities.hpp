@@ -1,20 +1,18 @@
 #pragma once
 
-#include "inexor/shared/tools.hpp"
+#include "inexor/engine/engine.hpp"
 
-/// 
+#include "inexor/enumerations/enum_sound_ids.hpp"
+#include "inexor/enumerations/enum_hudicon_ids.hpp"
+#include "inexor/enumerations/enum_gun_ids.hpp"
+#include "inexor/enumerations/enum_armor_ids.hpp"
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
+#include "inexor/enumerations/enum_entity_types.hpp"
+
+#include "inexor/server/server_clientinfo.hpp"
 #include "inexor/server/server_gameplay.hpp"
 
-/// sounds
-#include "inexor/enumerations/enum_sound_ids.hpp"
-/// hud icons
-#include "inexor/enumerations/enum_hudicon_ids.hpp"
-/// guns
-#include "inexor/enumerations/enum_gun_ids.hpp"
-/// armor types
-#include "inexor/enumerations/enum_armor_ids.hpp"
-/// network messages
-#include "inexor/enumerations/enum_netmsg_ids.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
 
 namespace inexor {
 namespace server {
@@ -55,19 +53,25 @@ namespace server {
         {200,   200,   S_ITEMARMOUR, "YA", HICON_YELLOW_ARMOUR, A_YELLOW},
         {20000, 30000, S_ITEMPUP,    "Q",  HICON_QUAD,          -1}
     };
+    
+    extern int gamemillis, gamelimit;
+
+    bool canspawnitem(int type)
+    {
+        if(m_bomb) return (type>=I_BOMBS && type<=I_BOMBDELAY);
+        else return !m_noitems && (type>=I_SHELLS && type<=I_QUAD && (!m_noammo || type<I_SHELLS || type>I_CARTRIDGES));
+    }
+
+    /// 
+    int spawntime(int type);
+
+    /// 
+    bool delayspawn(int type);
 
     /// server side item pickup, acknowledge first client that gets it
-    bool pickup(int i, int sender)
-    {
-        if((m_timed && gamemillis>=gamelimit) || !sents.inrange(i) || !sents[i].spawned) return false;
-        clientinfo *ci = getinfo(sender);
-        if(!ci || (!ci->local && !ci->state.canpickup(sents[i].type))) return false;
-        sents[i].spawned = false;
-        sents[i].spawntime = spawntime(sents[i].type);
-        sendf(-1, 1, "ri3", N_ITEMACC, i, sender);
-        ci->state.pickup(sents[i].type);
-        return true;
-    }
+    bool pickup(int i, int sender);
+
+
 
 };
 };

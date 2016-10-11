@@ -1,7 +1,13 @@
 #pragma once
 
+#include "inexor/macros/deprecated_string_macro.hpp"
+#include "inexor/server/server_gamestate.hpp"
+#include "inexor/enumerations/enum_admin_levels.hpp"
+
 namespace inexor {
 namespace server {
+
+    extern int nextexceeded;
 
     struct gameevent;
 
