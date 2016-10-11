@@ -1,7 +1,20 @@
 #pragma once
 
-#include "inexor/server/server_sounds.hpp"
-#include "inexor/server/server_guns.hpp"
+#include "inexor/shared/tools.hpp"
+
+/// 
+#include "inexor/server/server_gameplay.hpp"
+
+/// sounds
+#include "inexor/enumerations/enum_sound_ids.hpp"
+/// hud icons
+#include "inexor/enumerations/enum_hudicon_ids.hpp"
+/// guns
+#include "inexor/enumerations/enum_gun_ids.hpp"
+/// armor types
+#include "inexor/enumerations/enum_armor_ids.hpp"
+/// network messages
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
 
 namespace inexor {
 namespace server {
@@ -14,51 +27,7 @@ namespace server {
         bool spawned;
     };
 
-    /// enumeration for icons
-    enum
-    {
-        HICON_BLUE_ARMOUR = 0,
-        HICON_GREEN_ARMOUR,
-        HICON_YELLOW_ARMOUR,
-
-        HICON_HEALTH,
-
-        HICON_FIST,
-        HICON_SG,
-        HICON_CG,
-        HICON_RL,
-        HICON_RIFLE,
-        HICON_GL,
-        HICON_PISTOL,
-        HICON_BOMB,
-
-        HICON_QUAD,
-
-        HICON_RED_FLAG,
-        HICON_BLUE_FLAG,
-        HICON_NEUTRAL_FLAG,
-
-        HICON_TOKEN,
-
-        // bomberman
-        HICON_BOMBRADIUS,
-        HICON_BOMBDELAY,
-
-        HICON_X       = 20,
-        HICON_Y       = 1650,
-        HICON_TEXTY   = 1644,
-        HICON_STEP    = 490,
-        HICON_SIZE    = 120,
-        HICON_SPACE   = 40
-    };
-
-
-    enum 
-    {
-        A_BLUE,
-        A_GREEN,
-        A_YELLOW
-    };
+    vector<server_entity> sents;
 
     static struct itemstat 
     { 
@@ -86,6 +55,19 @@ namespace server {
         {200,   200,   S_ITEMARMOUR, "YA", HICON_YELLOW_ARMOUR, A_YELLOW},
         {20000, 30000, S_ITEMPUP,    "Q",  HICON_QUAD,          -1}
     };
+
+    /// server side item pickup, acknowledge first client that gets it
+    bool pickup(int i, int sender)
+    {
+        if((m_timed && gamemillis>=gamelimit) || !sents.inrange(i) || !sents[i].spawned) return false;
+        clientinfo *ci = getinfo(sender);
+        if(!ci || (!ci->local && !ci->state.canpickup(sents[i].type))) return false;
+        sents[i].spawned = false;
+        sents[i].spawntime = spawntime(sents[i].type);
+        sendf(-1, 1, "ri3", N_ITEMACC, i, sender);
+        ci->state.pickup(sents[i].type);
+        return true;
+    }
 
 };
 };

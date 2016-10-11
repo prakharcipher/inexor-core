@@ -16,7 +16,7 @@ namespace server {
         void fpsstate::addammo(int gun, int k, int scale)
         {
             itemstat &is = itemstats[gun-GUN_SG];
-            ammo[gun] = min(ammo[gun] + (is.add*k)/scale, is.max);
+            ammo[gun] = std::min(ammo[gun] + (is.add*k)/scale, is.max);
         }
 
         /// ammo limitation reached/exceeded?

@@ -5,6 +5,10 @@
 #include "inexor/server/server_entities.hpp"
 #include "inexor/server/server_gameplay.hpp"
 #include "inexor/server/server_events.hpp"
+#include "inexor/server/server_macros.hpp"
+/// master mode
+#include "inexor/macros/mastermode_macros.hpp"
+
 using namespace inexor::server;
 
 
@@ -90,16 +94,6 @@ namespace server
         extern void addclient(clientinfo *ci);
         extern void changeteam(clientinfo *ci);
     }
-
-    #define MM_MODE 0xF
-    #define MM_AUTOAPPROVE 0x1000
-    #define MM_PRIVSERV (MM_MODE | MM_AUTOAPPROVE)
-    #define MM_PUBSERV ((1<<MM_OPEN) | (1<<MM_VETO))
-    #define MM_COOPSERV (MM_AUTOAPPROVE | MM_PUBSERV | (1<<MM_LOCKED))
-
-    bool notgotitems = true;        // true when map has changed and waiting for clients to send item
-    int gamemillis = 0, gamelimit = 0, nextexceeded = 0, gamespeed = 100;
-    bool gamepaused = false, teamspersisted = false, shouldstep = true;
 
     string smapname = "";
     int interm = 0;
@@ -417,16 +411,8 @@ namespace server
     void *newclientinfo() { return new clientinfo; }
     void deleteclientinfo(void *ci) { delete (clientinfo *)ci; }
 
-    clientinfo *getinfo(int n)
-    {
-        if(n < MAXCLIENTS) return (clientinfo *)getclientinfo(n);
-        n -= MAXCLIENTS;
-        return bots.inrange(n) ? bots[n] : NULL;
-    }
-
     uint mcrc = 0;
     vector<entity> ments;
-    vector<server_entity> sents;
     vector<savedscore> scores;
 
     int msgsizelookup(int msg)
@@ -524,39 +510,6 @@ namespace server
         return cname[cidx];
     }
 
-    struct servmode
-    {
-        virtual ~servmode() {}
-
-        virtual void entergame(clientinfo *ci) {}
-        virtual void leavegame(clientinfo *ci, bool disconnecting = false) {}
-        virtual void connected(clientinfo *ci) {}
-
-        virtual void moved(clientinfo *ci, const vec &oldpos, bool oldclip, const vec &newpos, bool newclip) {}
-        virtual bool canspawn(clientinfo *ci, bool connecting = false) { return true; }
-        virtual void spawned(clientinfo *ci) {}
-        virtual int fragvalue(clientinfo *victim, clientinfo *actor)
-        {
-            if(victim==actor || isteam(victim->team, actor->team)) return -1;
-            return 1;
-        }
-        virtual bool canhit(clientinfo *victim, clientinfo *actor) { return true; }
-        virtual void died(clientinfo *victim, clientinfo *actor) {}
-        virtual bool canchangeteam(clientinfo *ci, const char *oldteam, const char *newteam) { return true; }
-        virtual void changeteam(clientinfo *ci, const char *oldteam, const char *newteam) {}
-        virtual void initclient(clientinfo *ci, packetbuf &p, bool connecting) {}
-        virtual void update() {}
-        virtual void updatelimbo() {}
-        virtual void cleanup() {}
-        virtual void setup() {}
-        virtual void newmap() {}
-        virtual void intermission() {}
-        virtual bool hidefrags() { return false; }
-        virtual int getteamscore(const char *team) { return 0; }
-        virtual void getteamscores(vector<teamscore> &scores) {}
-        virtual bool extinfoteam(const char *team, ucharbuf &p) { return false; }
-    };
-
     #define SERVMODE 1
     #include "inexor/fpsgame/capture.hpp"
     #include "inexor/fpsgame/ctf.hpp"
@@ -569,8 +522,6 @@ namespace server
     collectservmode collectmode;
     bombservmode bombmode;
     hideandseekservmode hideandseekmode;
-
-    servmode *smode = NULL;
 
     bool canspawnitem(int type) {
     	if(m_bomb) return (type>=I_BOMBS && type<=I_BOMBDELAY);
@@ -616,18 +567,6 @@ namespace server
             default:
                 return false;
         }
-    }
- 
-    bool pickup(int i, int sender)         // server side item pickup, acknowledge first client that gets it
-    {
-        if((m_timed && gamemillis>=gamelimit) || !sents.inrange(i) || !sents[i].spawned) return false;
-        clientinfo *ci = getinfo(sender);
-        if(!ci || (!ci->local && !ci->state.canpickup(sents[i].type))) return false;
-        sents[i].spawned = false;
-        sents[i].spawntime = spawntime(sents[i].type);
-        sendf(-1, 1, "ri3", N_ITEMACC, i, sender);
-        ci->state.pickup(sents[i].type);
-        return true;
     }
 
     static hashset<teaminfo> teaminfos;
@@ -1978,56 +1917,6 @@ namespace server
         }
     }
 	
-    void dodamage(clientinfo *target, clientinfo *actor, int damage, int gun, const vec &hitpush = vec(0, 0, 0))
-    {
-        if (smode && !smode->canhit(target, actor)) return;
-        gamestate &ts = target->state;
-        ts.dodamage(damage);
-        if(target!=actor && !isteam(target->team, actor->team)) actor->state.damage += damage;
-        sendf(-1, 1, "ri6", N_DAMAGE, target->clientnum, actor->clientnum, damage, ts.armour, ts.health);
-        if(target==actor) target->setpushed();
-        else if(!hitpush.iszero())
-        {
-            ivec v(vec(hitpush).rescale(DNF));
-            sendf(ts.health<=0 ? -1 : target->ownernum, 1, "ri7", N_HITPUSH, target->clientnum, gun, damage, v.x, v.y, v.z);
-            target->setpushed();
-        }
-        if(ts.health<=0)
-        {
-            target->state.deaths++;
-            int fragvalue = smode ? smode->fragvalue(target, actor) : (target==actor || isteam(target->team, actor->team) ? -1 : 1);
-            actor->state.frags += fragvalue;
-            if(fragvalue>0)
-            {
-                int friends = 0, enemies = 0; // note: friends also includes the fragger
-                if(m_teammode) loopv(clients) if(strcmp(clients[i]->team, actor->team)) enemies++; else friends++;
-                else { friends = 1; enemies = clients.length()-1; }
-                actor->state.effectiveness += fragvalue*friends/float(max(enemies, 1));
-            }
-            teaminfo *t = m_teammode ? teaminfos.access(actor->team) : NULL;
-            if(t) t->frags += fragvalue; 
-            sendf(-1, 1, "ri5", N_DIED, target->clientnum, actor->clientnum, actor->state.frags, t ? t->frags : 0);
-            target->position.setsize(0);
-            if(smode) smode->died(target, actor);
-            ts.state = CS_DEAD;
-            ts.lastdeath = gamemillis;
-
-            if (m_lms) checklms(); // Last Man Standing
-            else ts.respawn();
-
-            if(actor!=target && isteam(actor->team, target->team)) 
-            {
-                actor->state.teamkills++;
-                addteamkill(actor, target, 1);
-            }
-
-            ts.deadflush = ts.lastdeath + DEATHMILLIS;
-            // don't issue respawn yet until DEATHMILLIS has elapsed
-            // ts.respawn();
-        }
-    }
-
-
     bool gameevent::flush(clientinfo *ci, int fmillis)
     {
         process(ci);

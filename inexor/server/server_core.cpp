@@ -1,4 +1,4 @@
-#include "inexor/server/server_server.hpp"
+#include "inexor/server/server_core.hpp"
 
 namespace inexor {
 namespace server {
