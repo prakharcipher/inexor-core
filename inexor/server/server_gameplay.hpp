@@ -8,6 +8,7 @@
 #include "inexor/server/server_gamestate.hpp"
 #include "inexor/server/server_hitinfo.hpp"
 #include "inexor/server/server_administration.hpp"
+#include "inexor/server/server_clientinfo.hpp"
 
 #include "inexor/enumerations/enum_admin_levels.hpp"
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
@@ -35,11 +36,6 @@ namespace server {
     extern hashset<teaminfo> teaminfos;
     extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
     extern void *getclientinfo(int i);
-
-    /// this structure will be declared below
-    struct clientinfo;
-
-    /// TODO: not sure if this is correct!
     extern vector<clientinfo *> connects, clients, bots;
 
     /// 

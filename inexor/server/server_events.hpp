@@ -6,7 +6,7 @@
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
 #include "inexor/enumerations/enum_client_states.hpp"
 
-#include "inexor/server/server_clientinfo.hpp"
+//#include "inexor/server/server_clientinfo.hpp"
 #include "inexor/server/server_gamestate.hpp"
 #include "inexor/server/server_hitinfo.hpp"
 #include "inexor/server/server_guns.hpp"
@@ -23,11 +23,13 @@
 namespace inexor {
 namespace server {
 
+
+    /// pre-declaration
+    extern struct clientinfo;
+    
     extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
     extern clientinfo *getinfo(int n);
 
-    /// pre-declaration
-    struct clientinfo;
 
     /// abstract base class for events
     struct gameevent
@@ -82,6 +84,72 @@ namespace server {
 
         void process(clientinfo *ci);
     };
+
+    bool gameevent::flush(clientinfo *ci, int fmillis)
+    {
+        process(ci);
+        return true;
+    }
+
+    bool timedevent::flush(clientinfo *ci, int fmillis)
+    {
+        if(millis > fmillis) return false;
+        else if(millis >= ci->lastevent)
+        {
+            ci->lastevent = millis;
+            process(ci);
+        }
+        return true;
+    }
+
+
+    void clearevent(clientinfo *ci)
+    {
+        delete ci->events.remove(0);
+    }
+
+    void flushevents(clientinfo *ci, int millis)
+    {
+        while(ci->events.length())
+        {
+            gameevent *ev = ci->events[0];
+            if(ev->flush(ci, millis)) clearevent(ci);
+            else break;
+        }
+    }
+
+    extern int gamemillis;
+
+    void processevents()
+    {
+        loopv(clients)
+        {
+            clientinfo *ci = clients[i];
+            if(curtime>0 && ci->state.quadmillis) ci->state.quadmillis = max(ci->state.quadmillis-curtime, 0);
+            flushevents(ci, gamemillis);
+        }
+    }
+
+    void cleartimedevents(clientinfo *ci)
+    {
+        int keep = 0;
+        loopv(ci->events)
+        {
+            if(ci->events[i]->keepable())
+            {
+                if(keep < i)
+                {
+                    for(int j = keep; j < i; j++) delete ci->events[j];
+                    ci->events.remove(keep, i - keep);
+                    i = keep;
+                }
+                keep = i+1;
+                continue;
+            }
+        }
+        while(ci->events.length() > keep) delete ci->events.pop();
+        ci->timesync = false;
+    }
 
 
 };

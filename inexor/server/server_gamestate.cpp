@@ -5,6 +5,7 @@
 namespace inexor {
 namespace server {
 
+    /*
     gamestate::gamestate() : state(CS_DEAD),
                              editstate(CS_DEAD),
                              lifesequence(0)
@@ -57,6 +58,7 @@ namespace server {
     {
         fpsstate::backupweapon = weapon;
     }
+    */
 
 
 };

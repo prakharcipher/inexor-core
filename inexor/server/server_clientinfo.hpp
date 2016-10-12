@@ -1,18 +1,20 @@
 #pragma once
 
+#include "inexor/server/server_fpsstate.hpp"
+#include "inexor/server/server_events.hpp"
+
+#include "inexor/deprecated/vector_template.hpp"
+
 #include "inexor/macros/deprecated_string_macro.hpp"
-#include "inexor/macros/type_definitions.hpp" // uchar
-#include "inexor/enumerations/enum_client_states.hpp"
+#include "inexor/macros/type_definitions.hpp"
 #include "inexor/macros/memfree_macros.hpp"
-#include "inexor/enumerations/enum_admin_levels.hpp"
 #include "inexor/macros/define_null_macro.hpp"
+
+#include "inexor/enumerations/enum_client_states.hpp"
+#include "inexor/enumerations/enum_admin_levels.hpp"
 
 #include <enet/enet.h>
 #include <algorithm>
-
-#include "inexor/server/server_gamestate.hpp"
-
-#include "inexor/deprecated/vector_template.hpp"
 
 
 namespace inexor {
@@ -21,9 +23,7 @@ namespace server {
     extern int gamemillis, nextexceeded;
     extern ENetPeer *getclientpeer(int i);
     extern void freechallenge(void *answer);
-
-    struct gameevent;
-
+    
     /// 
     struct clientinfo
     {
@@ -54,7 +54,19 @@ namespace server {
         int authkickvictim;
         char *authkickreason;
 
-        clientinfo();
+        //clientinfo();
+
+        // lets try to implement the constructor here
+        clientinfo::clientinfo() : getdemo(NULL),
+                                   getmap(NULL),
+                                   clipboard(NULL),
+                                   authchallenge(NULL),
+                                   authkickreason(NULL)
+        {
+            reset();
+        }
+
+
         ~clientinfo();
 
         void addevent(gameevent *e);

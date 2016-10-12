@@ -1,4 +1,3 @@
-#include "inexor/fpsgame/game.hpp"
 #include "inexor/util/random.hpp"
 #include "inexor/util/Logging.hpp"
 
@@ -8,6 +7,7 @@
 #include "inexor/server/server_macros.hpp"
 
 #include "inexor/macros/mastermode_macros.hpp"
+#include "inexor/macros/loop_macros.hpp"
 
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
 using namespace inexor::server;
@@ -1748,68 +1748,6 @@ namespace server
         if(smode) smode->intermission();
     }
 	
-    bool gameevent::flush(clientinfo *ci, int fmillis)
-    {
-        process(ci);
-        return true;
-    }
-
-    bool timedevent::flush(clientinfo *ci, int fmillis)
-    {
-        if(millis > fmillis) return false;
-        else if(millis >= ci->lastevent)
-        {
-            ci->lastevent = millis;
-            process(ci);
-        }
-        return true;
-    }
-
-    void clearevent(clientinfo *ci)
-    {
-        delete ci->events.remove(0);
-    }
-
-    void flushevents(clientinfo *ci, int millis)
-    {
-        while(ci->events.length())
-        {
-            gameevent *ev = ci->events[0];
-            if(ev->flush(ci, millis)) clearevent(ci);
-            else break;
-        }
-    }
-
-    void processevents()
-    {
-        loopv(clients)
-        {
-            clientinfo *ci = clients[i];
-            if(curtime>0 && ci->state.quadmillis) ci->state.quadmillis = max(ci->state.quadmillis-curtime, 0);
-            flushevents(ci, gamemillis);
-        }
-    }
-
-    void cleartimedevents(clientinfo *ci)
-    {
-        int keep = 0;
-        loopv(ci->events)
-        {
-            if(ci->events[i]->keepable())
-            {
-                if(keep < i)
-                {
-                    for(int j = keep; j < i; j++) delete ci->events[j];
-                    ci->events.remove(keep, i - keep);
-                    i = keep;
-                }
-                keep = i+1;
-                continue;
-            }
-        }
-        while(ci->events.length() > keep) delete ci->events.pop();
-        ci->timesync = false;
-    }
 
     void serverupdate()
     {

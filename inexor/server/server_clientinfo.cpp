@@ -4,6 +4,7 @@ namespace inexor {
 namespace server {
 
 
+    /*
     clientinfo::clientinfo() : getdemo(NULL),
                                getmap(NULL),
                                clipboard(NULL),
@@ -12,6 +13,7 @@ namespace server {
     {
         reset();
     }
+    */
 
     clientinfo::~clientinfo()
     {

@@ -4,7 +4,6 @@
 #include "inexor/server/server_stats.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
 #include "inexor/deprecated/vector_template.hpp"
-#include "inexor/server/server_clientinfo.hpp"
 
 #include "inexor/engine/engine.hpp"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "inexor/server/server_projectilestate.hpp"
-//#include "inexor/server/server_fpsstate.hpp"
+#include "inexor/server/server_fpsstate.hpp"
 #include "inexor/enumerations/enum_client_states.hpp"
 
 // TODO: remove dependencies!
@@ -27,27 +27,58 @@ namespace server {
         int lasttimeplayed, timeplayed;
         float effectiveness;
 
+        gamestate() : state(CS_DEAD),
+                      editstate(CS_DEAD),
+                      lifesequence(0)
+        {
+        }
 
-        /// 
-        gamestate();
+        bool isalive(int gamemillis)
+        {
+            return state==CS_ALIVE || (state==CS_DEAD && gamemillis - lastdeath <= DEATHMILLIS);
+        }
 
-        /// 
-        bool isalive(int gamemillis);
+        bool waitexpired(int gamemillis)
+        {
+            return gamemillis - lastshot >= gunwait;
+        }
 
-        /// 
-        bool waitexpired(int gamemillis);
+        void reset()
+        {
+            if(state!=CS_SPECTATOR) state = editstate = CS_DEAD;
+            maxhealth = 100;
+            rockets.reset();
+            grenades.reset();
+            bombs.reset();
+            timeplayed = 0;
+            effectiveness = 0;
+            frags = flags = deaths = teamkills = shotdamage = damage = tokens = 0;
+            lastdeath = 0;
+            respawn();
+        }
 
-        /// 
-        void reset();
+        void respawn()
+        {
+            fpsstate::respawn();
+            o = vec(-1e10f, -1e10f, -1e10f);
+            deadflush = 0;
+            lastspawn = -1;
+            lastshot = 0;
+            tokens = 0;
+        }
 
-        /// 
-        void respawn();
+        void reassign()
+        {
+            respawn();
+            rockets.reset();
+            grenades.reset();
+            bombs.reset();
+        }
 
-        /// 
-        void reassign();
-
-        /// 
-        void setbackupweapon(int weapon);
+        void setbackupweapon(int weapon)
+        {
+            fpsstate::backupweapon = weapon;
+        }
 
     };
 
