@@ -13,6 +13,7 @@ namespace inexor {
 namespace server {
 
     extern bool shouldcheckteamkills;
+    extern uint getclientip(int n);
 
     struct teamkillinfo
     {

@@ -28,7 +28,7 @@ namespace server {
 
     void changegamespeed(int val, clientinfo *ci)
     {
-        val = clamp(val, 10, 1000);
+        val = boost::algorithm::clamp(val, 10, 1000);
         if(gamespeed==val) return;
         gamespeed = val;
         sendf(-1, 1, "riii", N_GAMESPEED, gamespeed, ci ? ci->clientnum : -1);

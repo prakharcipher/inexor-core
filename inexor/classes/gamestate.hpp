@@ -1,8 +1,9 @@
 #pragma once
 
-#include "inexor/classes/fpsstate.hpp"
 #include "inexor/templates/projectilestate.hpp"
 #include "inexor/deprecated/fixed_geom.hpp"
+#include "inexor/classes/fpsstate.hpp"
+#include "inexor/enumerations/enum_client_states.hpp"
 
 namespace inexor {
 namespace server {
@@ -10,6 +11,8 @@ namespace server {
     /// 
     extern const int DEATHMILLIS;
     
+    struct fpsstate;
+
     /// 
     struct gamestate : fpsstate
     {

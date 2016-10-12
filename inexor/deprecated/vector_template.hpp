@@ -3,6 +3,7 @@
 #include "inexor/macros/define_null_macro.hpp"
 #include "inexor/macros/loop_macros.hpp"
 #include "inexor/deprecated/databuf_template.hpp"
+#include "inexor/deprecated/isclass.hpp"
 #include <assert.h>
 
 namespace inexor {
@@ -187,7 +188,7 @@ namespace server {
         void growbuf(int sz)
         {
             int olen = alen;
-            if(!alen) alen = max(MINSIZE, sz);
+            if(!alen) alen = std::max(MINSIZE, sz);
             else while(alen < sz) alen += alen/2;
             if(alen <= olen) return;
             buf = (T *)realloc(buf, alen*sizeof(T));

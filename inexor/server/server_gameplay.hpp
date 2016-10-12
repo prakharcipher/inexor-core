@@ -13,7 +13,9 @@
 
 #include <enet/enet.h>
 #include <algorithm>
+#include <boost/algorithm/clamp.hpp>
 
+#include "inexor/classes/servmode.hpp"
 
 namespace inexor {
 namespace server {

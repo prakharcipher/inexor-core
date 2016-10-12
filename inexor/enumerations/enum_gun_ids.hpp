@@ -3,6 +3,8 @@
 namespace inexor {
 namespace server {
 
+    /// TODO: give this anonymous enumeration a name!
+    /// ...
     enum 
     {
         GUN_FIST = 0,	/// fist

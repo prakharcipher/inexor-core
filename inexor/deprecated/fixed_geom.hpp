@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "inexor/macros/constants.hpp"
 #include <boost/algorithm/clamp.hpp>
+#include "inexor/deprecated/type_definitions.hpp"
 
 namespace inexor {
 namespace server {
