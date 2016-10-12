@@ -11,8 +11,6 @@
 
 #include "inexor/deprecated/hashset_template.hpp"
 
-#include "inexor/macros/clamp_template.hpp"
-
 #include <enet/enet.h>
 #include <algorithm>
 

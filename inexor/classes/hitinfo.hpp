@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/engine/engine.hpp"
+#include "inexor/deprecated/fixed_geom.hpp"
 
 namespace inexor {
 namespace server {

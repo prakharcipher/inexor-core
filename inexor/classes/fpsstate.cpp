@@ -3,36 +3,34 @@
 namespace inexor {
 namespace server {
 
-
     fpsstate::fpsstate() : maxhealth(100),
-        aitype(AI_NONE),
-        skill(0),
-        backupweapon(GUN_FIST)
+                           aitype(AI_NONE),
+                           skill(0),
+                           backupweapon(GUN_FIST)
     {
     }
 
 
-    /// set initial ammo
-    void fpsstate::baseammo(int gun, int k, int scale)
+    void fpsstate::baseammo(int gun, int k = 2, int scale = 1)
     {
         ammo[gun] = (itemstats[gun-GUN_SG].add*k)/scale;
     }
 
-    /// add ammo
-    void fpsstate::addammo(int gun, int k, int scale)
+
+    void fpsstate::addammo(int gun, int k = 1, int scale = 1)
     {
         itemstat &is = itemstats[gun-GUN_SG];
-        ammo[gun] = std::min(ammo[gun] + (is.add*k)/scale, is.max);
+        ammo[gun] = min(ammo[gun] + (is.add*k)/scale, is.max);
     }
 
-    /// ammo limitation reached/exceeded?
+
     bool fpsstate::hasmaxammo(int type)
     {
         const itemstat &is = itemstats[type-I_SHELLS];
         return ammo[type-I_SHELLS+GUN_SG]>=is.max;
     }
 
-    /// check if I can pick up this item depending on the radius
+
     bool fpsstate::canpickup(int type)
     {
         if(type<I_SHELLS || type>I_QUAD) return false;
@@ -56,7 +54,7 @@ namespace server {
         }
     }
 
-    /// pick up this item
+
     void fpsstate::pickup(int type)
     {
         if(type<I_SHELLS || type>I_QUAD) return;
@@ -64,26 +62,26 @@ namespace server {
         switch(type)
         {
             case I_BOOST:
-                maxhealth = std::min(maxhealth+is.add, is.max);
+                maxhealth = min(maxhealth+is.add, is.max);
             case I_HEALTH: // boost also adds to health
-                health = std::min(health+is.add, maxhealth);
+                health = min(health+is.add, maxhealth);
                 break;
             case I_GREENARMOUR:
             case I_YELLOWARMOUR:
-                armour = std::min(armour+is.add, is.max);
+                armour = min(armour+is.add, is.max);
                 armourtype = is.info;
                 break;
             case I_QUAD:
-                quadmillis = std::min(quadmillis+is.add, is.max);
+                quadmillis = min(quadmillis+is.add, is.max);
                 break;
             case I_BOMBRADIUS:
-                bombradius = std::min(bombradius+is.add, is.max);
+                bombradius = min(bombradius+is.add, is.max);
                 break;
             case I_BOMBDELAY:
-                bombdelay = std::min(bombdelay+is.add, is.max);
+                bombdelay = min(bombdelay+is.add, is.max);
                 break;
             default:
-                ammo[is.info] = std::min(ammo[is.info]+is.add, is.max);
+                ammo[is.info] = min(ammo[is.info]+is.add, is.max);
                 break;
         }
     }
@@ -134,10 +132,10 @@ namespace server {
             armour = 100;
             ammo[GUN_PISTOL] = 40;
             backupweapon = GUN_FIST;
-            int spawngun1 = ::inexor::util::rnd(5)+1, spawngun2;
+            int spawngun1 = rnd(5)+1, spawngun2;
             gunselect = spawngun1;
             baseammo(spawngun1, m_noitems ? 2 : 1);
-            do spawngun2 = ::inexor::util::rnd(5)+1; while(spawngun1==spawngun2);
+            do spawngun2 = rnd(5)+1; while(spawngun1==spawngun2);
             baseammo(spawngun2, m_noitems ? 2 : 1);
             if(m_noitems) ammo[GUN_GL] += 1;
         }
@@ -209,7 +207,7 @@ namespace server {
     }
 
     /// is there ammo left for this gun
-    int fpsstate::hasammo(int gun, int exclude)
+    int fpsstate::hasammo(int gun, int exclude = -1)
     {
         return gun >= 0 && gun <= NUMGUNS && gun != exclude && ammo[gun] > 0;
     }

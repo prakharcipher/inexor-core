@@ -6,9 +6,8 @@
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
 #include "inexor/enumerations/enum_client_states.hpp"
 
-//#include "inexor/server/server_clientinfo.hpp"
-#include "inexor/server/server_gamestate.hpp"
-#include "inexor/server/server_hitinfo.hpp"
+#include "inexor/classes/gamestate.hpp"
+#include "inexor/classes/hitinfo.hpp"
 #include "inexor/server/server_guns.hpp"
 #include "inexor/server/server_entities.hpp"
 
