@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <algorithm>
-#include "inexor/templates/clamp.hpp"
 #include "inexor/macros/constants.hpp"
 
 namespace inexor {
@@ -67,7 +66,7 @@ namespace server {
         vec2 &min(float f)       { x = std::min(x, f); y = std::min(y, f); return *this; }
         vec2 &max(float f)       { x = std::max(x, f); y = std::max(y, f); return *this; }
         vec2 &abs() { x = fabs(x); y = fabs(y); return *this; }
-        vec2 &clamp(float l, float h) { x = clamp(x, l, h); y = clamp(y, l, h); return *this; }
+        vec2 &clamp(float l, float h) { x = ::clamp(x, l, h); y = ::clamp(y, l, h); return *this; }
         vec2 &reflect(const vec2 &n) { float k = 2*dot(n); x -= k*n.x; y -= k*n.y; return *this; }
         vec2 &lerp(const vec2 &b, float t) { x += (b.x-x)*t; y += (b.y-y)*t; return *this; }
         vec2 &lerp(const vec2 &a, const vec2 &b, float t) { x = a.x + (b.x-a.x)*t; y = a.y + (b.y-a.y)*t; return *this; }
@@ -210,14 +209,14 @@ namespace server {
         {
             float m = squaredlen(), k = dot(n);
             projectxydir(n);
-            rescale(sqrtf(::std::max(m - k*k, 0.0f)));
+            rescale(sqrtf(std::max(m - k*k, 0.0f)));
             return *this;
         }
         vec &projectxy(const vec &n, float threshold)
         {
-            float m = squaredlen(), k = ::std::min(dot(n), threshold);
+            float m = squaredlen(), k = std::min(dot(n), threshold);
             projectxydir(n);
-            rescale(sqrtf(::std::max(m - k*k, 0.0f)));
+            rescale(sqrtf(std::max(m - k*k, 0.0f)));
             return *this;
         }
 
@@ -1258,10 +1257,10 @@ namespace server {
         ivec &sub(const ivec &v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
         ivec &mask(int n) { x &= n; y &= n; z &= n; return *this; }
         ivec &neg() { return mul(-1); }
-        ivec &std::min(const ivec &o) { x = ::std::min(x, o.x); y = ::std::min(y, o.y); z = ::std::min(z, o.z); return *this; }
-        ivec &std::max(const ivec &o) { x = ::std::max(x, o.x); y = ::std::max(y, o.y); z = ::std::max(z, o.z); return *this; }
-        ivec &std::min(int n) { x = ::std::min(x, n); y = ::std::min(y, n); z = ::std::min(z, n); return *this; }
-        ivec &std::max(int n) { x = ::std::max(x, n); y = ::std::max(y, n); z = ::std::max(z, n); return *this; }
+        ivec &min(const ivec &o) { x = std::min(x, o.x); y = std::min(y, o.y); z = std::min(z, o.z); return *this; }
+        ivec &max(const ivec &o) { x = std::max(x, o.x); y = std::max(y, o.y); z = std::max(z, o.z); return *this; }
+        ivec &min(int n) { x = std::min(x, n); y = std::min(y, n); z = std::min(z, n); return *this; }
+        ivec &max(int n) { x = std::max(x, n); y = std::max(y, n); z = std::max(z, n); return *this; }
         ivec &abs() { x = ::abs(x); y = ::abs(y); z = ::abs(z); return *this; }
         ivec &clamp(int l, int h) { x = clamp(x, l, h); y = clamp(y, l, h); z = clamp(z, l, h); return *this; }
         ivec &cross(const ivec &a, const ivec &b) { x = a.y*b.z-a.z*b.y; y = a.z*b.x-a.x*b.z; z = a.x*b.y-a.y*b.x; return *this; }
@@ -1324,10 +1323,10 @@ namespace server {
         ivec2 &sub(const ivec2 &v) { x -= v.x; y -= v.y; return *this; }
         ivec2 &mask(int n) { x &= n; y &= n; return *this; }
         ivec2 &neg() { x = -x; y = -y; return *this; }
-        ivec2 &std::min(const ivec2 &o) { x = ::std::min(x, o.x); y = ::std::min(y, o.y); return *this; }
-        ivec2 &std::max(const ivec2 &o) { x = ::std::max(x, o.x); y = ::std::max(y, o.y); return *this; }
-        ivec2 &std::min(int n) { x = ::std::min(x, n); y = ::std::min(y, n); return *this; }
-        ivec2 &std::max(int n) { x = ::std::max(x, n); y = ::std::max(y, n); return *this; }
+        ivec2 &std::min(const ivec2 &o) { x = std::min(x, o.x); y = std::min(y, o.y); return *this; }
+        ivec2 &std::max(const ivec2 &o) { x = std::max(x, o.x); y = std::max(y, o.y); return *this; }
+        ivec2 &std::min(int n) { x = std::min(x, n); y = std::min(y, n); return *this; }
+        ivec2 &std::max(int n) { x = std::max(x, n); y = std::max(y, n); return *this; }
         ivec2 &abs() { x = ::abs(x); y = ::abs(y); return *this; }
         int dot(const ivec2 &o) const { return x*o.x + y*o.y; }
         int cross(const ivec2 &o) const { return x*o.y - y*o.x; }

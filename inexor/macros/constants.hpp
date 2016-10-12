@@ -18,5 +18,8 @@ namespace server {
     #define MAXTAGLEN 8    /// max player tag length
     #define BOTTAG "Bot"   /// all bots share this tag
 
+    #define M_PI 3.14159265358979323846
+    #define M_LN2 0.693147180559945309417
+
 };
 };
