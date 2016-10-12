@@ -1,17 +1,18 @@
 #pragma once
 
-#include "inexor/server/server_clientinfo.hpp"
-#include "inexor/macros/loop_macros.hpp"
-#include "inexor/enumerations/enum_bot_levels.hpp"
-#include "inexor/macros/gamemode_macros.hpp"
-#include "inexor/macros/type_definitions.hpp"
+//#include "inexor/deprecated/type_definitions.hpp"
+/// TODO: migrate to std::vector
 #include "inexor/deprecated/vector_template.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/enumerations/enum_bot_types.hpp"
+
+#include "inexor/classes/clientinfo.hpp"
+
 
 namespace inexor {
 namespace server {
 
-    bool shouldcheckteamkills = false;
-    extern uint getclientip(int n);
+    extern bool shouldcheckteamkills;
 
     struct teamkillinfo
     {

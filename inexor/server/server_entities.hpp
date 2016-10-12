@@ -9,7 +9,7 @@
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
 #include "inexor/enumerations/enum_entity_types.hpp"
 
-#include "inexor/server/server_clientinfo.hpp"
+#include "inexor/classes/clientinfo.hpp"
 #include "inexor/server/server_gameplay.hpp"
 
 #include "inexor/macros/gamemode_macros.hpp"
@@ -58,12 +58,10 @@ namespace server {
     };
     
     extern int gamemillis, gamelimit;
+    extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
 
-    bool canspawnitem(int type)
-    {
-        if(m_bomb) return (type>=I_BOMBS && type<=I_BOMBDELAY);
-        else return !m_noitems && (type>=I_SHELLS && type<=I_QUAD && (!m_noammo || type<I_SHELLS || type>I_CARTRIDGES));
-    }
+    /// 
+    bool canspawnitem(int type);
 
     /// 
     int spawntime(int type);

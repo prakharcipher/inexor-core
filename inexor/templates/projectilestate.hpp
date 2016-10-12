@@ -6,6 +6,7 @@ namespace inexor {
 namespace server {
 
     /// please note that tempalte must have their implementation in the header file!
+    /// so there is no projectilestate.cpp!
     template <int N>
     struct projectilestate
     {

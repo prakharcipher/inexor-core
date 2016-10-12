@@ -3,6 +3,8 @@
 namespace inexor {
 namespace server {
 
+    bool shouldcheckteamkills = false;
+
     void addteamkill(clientinfo *actor, clientinfo *victim, int n)
     {
         if(!m_timed || actor->state.aitype != AI_NONE || actor->local || actor->privilege || (victim && victim->state.aitype != AI_NONE)) return;

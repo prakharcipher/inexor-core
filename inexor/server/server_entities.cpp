@@ -3,6 +3,14 @@
 namespace inexor {
 namespace server {
 
+
+    bool canspawnitem(int type)
+    {
+        if(m_bomb) return (type>=I_BOMBS && type<=I_BOMBDELAY);
+        else return !m_noitems && (type>=I_SHELLS && type<=I_QUAD && (!m_noammo || type<I_SHELLS || type>I_CARTRIDGES));
+    }
+
+
     int spawntime(int type)
     {
         if(m_classicsp) return INT_MAX;
@@ -45,7 +53,6 @@ namespace server {
         }
     }
 
-    extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
 
     bool pickup(int i, int sender)
     {

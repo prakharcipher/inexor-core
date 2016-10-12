@@ -1,17 +1,15 @@
 #pragma once
 
-#include "inexor/server/server_fpsstate.hpp"
-#include "inexor/server/server_events.hpp"
-
-#include "inexor/deprecated/vector_template.hpp"
-
-#include "inexor/macros/deprecated_string_macro.hpp"
-#include "inexor/macros/type_definitions.hpp"
 #include "inexor/macros/memfree_macros.hpp"
-#include "inexor/macros/define_null_macro.hpp"
 
 #include "inexor/enumerations/enum_client_states.hpp"
 #include "inexor/enumerations/enum_admin_levels.hpp"
+
+#include "inexor/deprecated/old_string.hpp"
+#include "inexor/deprecated/vector_template.hpp"
+
+#include "inexor/classes/gameevent.hpp"
+#include "inexor/classes/gamestate.hpp"
 
 #include <enet/enet.h>
 #include <algorithm>
@@ -20,10 +18,10 @@
 namespace inexor {
 namespace server {
 
-    extern int gamemillis, nextexceeded;
+    extern int nextexceeded, gamemillis;
     extern ENetPeer *getclientpeer(int i);
     extern void freechallenge(void *answer);
-    
+
     /// 
     struct clientinfo
     {
@@ -54,18 +52,7 @@ namespace server {
         int authkickvictim;
         char *authkickreason;
 
-        //clientinfo();
-
-        // lets try to implement the constructor here
-        clientinfo::clientinfo() : getdemo(NULL),
-                                   getmap(NULL),
-                                   clipboard(NULL),
-                                   authchallenge(NULL),
-                                   authkickreason(NULL)
-        {
-            reset();
-        }
-
+        clientinfo();
 
         ~clientinfo();
 

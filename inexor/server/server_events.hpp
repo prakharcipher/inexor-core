@@ -15,6 +15,9 @@
 #include "inexor/macros/constants.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
 
+
+#include "inexor/classes/gameevent.hpp"
+
 #include "inexor/engine/engine.hpp"
 
 #include <enet/enet.h>
@@ -23,24 +26,9 @@
 namespace inexor {
 namespace server {
 
-
-    /// pre-declaration
-    extern struct clientinfo;
-    
+   
     extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
     extern clientinfo *getinfo(int n);
-
-
-    /// abstract base class for events
-    struct gameevent
-    {
-        virtual ~gameevent() {}
-
-        virtual bool flush(clientinfo *ci, int fmillis);
-        virtual void process(clientinfo *ci) {}
-
-        virtual bool keepable() const { return false; }
-    };
 
     /// 
     struct timedevent : gameevent

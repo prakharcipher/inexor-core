@@ -1,6 +1,6 @@
 #pragma once
 
-#include "inexor/macros/type_definitions.hpp"
+#include "inexor/deprecated/type_definitions.hpp"
 
 namespace inexor {
 namespace server {
