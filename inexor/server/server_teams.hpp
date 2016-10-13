@@ -1,10 +1,14 @@
 #pragma once
 
 #include "inexor/macros/constants.hpp"
-#include "inexor/deprecated/hashset_template.hpp"
 #include "inexor/macros/loop_macros.hpp"
+
 #include "inexor/classes/clientinfo.hpp"
 #include "inexor/classes/servmode.hpp"
+
+#include "inexor/deprecated/hashset_template.hpp"
+
+#include "inexor/server/server_stats.hpp"
 
 #include <enet/enet.h>
 
@@ -16,6 +20,19 @@ namespace server {
     extern vector<clientinfo *> connects, clients, bots;
     extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
 
+
+    /// create hashes to access hashmaps
+    static inline uint hthash(const teamscore &t) 
+    {
+        return ::hthash(t.team); 
+    }
+
+    /// compare two teamnames
+    static inline bool htcmp(const char *key, const teamscore &t) 
+    {
+        return ::htcmp(key, t.team);
+    }
+
     /// scoreboard team block description
     struct teaminfo
     {
@@ -26,7 +43,7 @@ namespace server {
     /// create hash for hashsts
     static inline uint hthash(const teaminfo &t) 
     { 
-        return hthash(t.team); 
+        return ::hthash(t.team); 
     }
 
     /// compare two team names
@@ -34,7 +51,6 @@ namespace server {
     {
         return !strcmp(team, t.team);
     }
-
 
     static hashset<teaminfo> teaminfos;
 

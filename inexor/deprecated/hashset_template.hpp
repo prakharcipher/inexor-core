@@ -15,6 +15,13 @@
 using std::min;
 using std::max;
 
+static inline uint hanni_delete_me(const char *key)
+{
+    uint h = 5381;
+    for(int i = 0, k; (k = key[i]); i++) h = ((h<<5)+h)^k;    /// bernstein k=33 xor
+    return h;
+}
+
 
 // simple bernstein hashing algorithm
 // invented by Dan Bernstein
