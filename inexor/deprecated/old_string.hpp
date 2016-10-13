@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdarg>
 
+using std::min;
 
 #ifdef __GNUC__
     #define PRINTFARGS(fmt, args) __attribute__((format(printf, fmt, args)))

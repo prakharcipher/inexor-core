@@ -38,7 +38,7 @@ namespace server {
 
     static hashset<teaminfo> teaminfos;
 
-    /// 
+
     void clearteaminfo();
 
 

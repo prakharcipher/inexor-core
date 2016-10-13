@@ -59,10 +59,12 @@
   #define UNUSED
 #endif
 
+
 using std::swap;
 using std::min;
 using std::max;
 using boost::algorithm::clamp;
+
 
 #ifdef __GNUC__
 #define bitscan(mask) (__builtin_ffs(mask)-1)
@@ -91,28 +93,6 @@ static inline int bitscan(uint mask)
 INEXOR_FUNCTION_ALIAS(rnd, inexor::util::rnd<int>);
 INEXOR_FUNCTION_ALIAS(rndscale, inexor::util::rnd<float>);
 INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
-
-
-// some more (precise) mathematical constants
-#ifdef WIN32
-  #ifndef M_PI
-    #define M_PI 3.14159265358979323846
-  #endif
-  #ifndef M_LN2
-    #define M_LN2 0.693147180559945309417
-  #endif
-  /// Compare Strings, ignore case.
-  #define strcasecmp _stricmp
-  #define strncasecmp _strnicmp
-  /// Path divide character, \ on win, otherwise /.
-  #define PATHDIV '\\'
-#else
-  // adapt macros to OS specifications
-  #define __cdecl
-  #define _vsnprintf vsnprintf
-  /// Path divide character, \ on win, otherwise /.
-  #define PATHDIV '/'
-#endif
 
 
 // workaround for some C platforms that have these two functions as macros - not used anywhere

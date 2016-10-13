@@ -16,6 +16,11 @@
 #pragma once
 
 #include <iostream>
+#include <algorithm>
+
+using std::min;
+using std::max;
+using std::swap;
 
 /// declaration of 2- and 4-dimensional vectors
 struct vec;

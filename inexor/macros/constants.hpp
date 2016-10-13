@@ -27,9 +27,27 @@ namespace server {
     #define PROTOCOL_VERSION 303            // bump when protocol changes last sauerbraten protocol was 259
     #define DEMO_VERSION 1                  // bump when demo format changes
     #define DEMO_MAGIC "INEXOR_DEMO"
-
+    
+    // some more (precise) mathematical constants
+    #ifdef WIN32
+    #ifndef M_PI
     #define M_PI 3.14159265358979323846
+    #endif
+    #ifndef M_LN2
     #define M_LN2 0.693147180559945309417
+    #endif
+    /// Compare Strings, ignore case.
+    #define strcasecmp _stricmp
+    #define strncasecmp _strnicmp
+    /// Path divide character, \ on win, otherwise /.
+    #define PATHDIV '\\'
+    #else
+    // adapt macros to OS specifications
+    #define __cdecl
+    #define _vsnprintf vsnprintf
+    /// Path divide character, \ on win, otherwise /.
+    #define PATHDIV '/'
+    #endif
 
     #define PI  (3.1415927f)
     #define PI2 (2*PI)

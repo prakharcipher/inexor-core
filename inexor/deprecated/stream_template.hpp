@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/deprecated/swap_bytes_template.hpp"
+
 /// 
 struct stream
 {
