@@ -5,17 +5,18 @@
 #include "inexor/server/server_core.hpp"
 #include "inexor/server/server_stats.hpp"
 #include "inexor/server/server_administration.hpp"
+#include "inexor/server/server_teams.hpp"
 
 #include "inexor/enumerations/enum_admin_levels.hpp"
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
-
-#include "inexor/deprecated/hashset_template.hpp"
 
 #include <enet/enet.h>
 #include <algorithm>
 #include <boost/algorithm/clamp.hpp>
 
 #include "inexor/classes/servmode.hpp"
+#include "inexor/deprecated/hashset_template.hpp"
+
 
 namespace inexor {
 namespace server {

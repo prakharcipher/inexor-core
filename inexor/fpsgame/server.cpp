@@ -6,15 +6,26 @@
 #include "inexor/server/server_events.hpp"
 #include "inexor/server/server_macros.hpp"
 
+#include "inexor/classes/demoheader.hpp"
+
+#include "inexor/deprecated/type_definitions.hpp"
+
+#include "inexor/macros/constants.hpp"
 #include "inexor/macros/mastermode_macros.hpp"
 #include "inexor/macros/loop_macros.hpp"
 
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
+#include "inexor/enumerations/enum_master_modes.hpp"
+#include "inexor/enumerations/enum_client_states.hpp"
+
 using namespace inexor::server;
 
 
 namespace game
 {
+    extern bool clientoption(const char *arg);
+    extern bool serveroption(const char *arg);
+
     void parseoptions(vector<const char *> &args)
     {
         loopv(args)
@@ -477,7 +488,6 @@ namespace server
         return cname[cidx];
     }
 
-    static hashset<teaminfo> teaminfos;
 
     void clearteaminfo()
     {

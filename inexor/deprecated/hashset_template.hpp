@@ -3,12 +3,13 @@
 #include "inexor/macros/memfree_macros.hpp"
 #include "inexor/macros/loop_macros.hpp"
 #include "inexor/deprecated/old_string.hpp"
+#include "inexor/deprecated/type_definitions.hpp"
+#include "inexor/deprecated/vector_template.hpp"
 #include <algorithm>
 #include <SDL_opengl.h>
 
 namespace inexor {
 namespace server {
-
 
     // simple bernstein hashing algorithm
     // invented by Dan Bernstein

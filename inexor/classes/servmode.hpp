@@ -4,6 +4,7 @@ namespace inexor {
 namespace server {
 
     struct packetbuf;
+    struct teamscore;
 
     /// 
     struct servmode
