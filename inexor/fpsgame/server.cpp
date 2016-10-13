@@ -1,4 +1,3 @@
-#include "inexor/fpsgame/game.hpp"
 #include "inexor/util/random.hpp"
 #include "inexor/util/Logging.hpp"
 
@@ -29,12 +28,19 @@
 
 /// enumerations
 #include "inexor/enumerations/enum_disconnect_reasons.hpp"
+#include "inexor/enumerations/enum_master_modes.hpp"
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
+
+/// deprecated modules
+#include "inexor/deprecated/old_string.hpp"
 
 /// macros
 #include "inexor/macros/loop_macros.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/macros/mastermode_macros.hpp"
 
-
+/// extern definitions
+#include "inexor/server/extern_pre_declarations.hpp"
 using namespace inexor::server;
 
 
