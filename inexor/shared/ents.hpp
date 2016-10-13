@@ -1,8 +1,7 @@
 /// @file static map entities ("entity") and dynamic entities (players/monsters, "dynent")
 /// the gamecode extends these types to add game specific functionality.
 
-/// ET_*: the only static entity types dictated by the engine... rest are gamecode dependent.
-enum { ET_EMPTY=0, ET_LIGHT, ET_MAPMODEL, ET_PLAYERSTART, ET_ENVMAP, ET_PARTICLES, ET_SOUND, ET_SPOTLIGHT, ET_GAMESPECIFIC, ET_BOMBS = 14, ET_OBSTACLE = 34};
+#include "inexor/enumerations/enum_entity_types.hpp"
 
 /// persistent map entity.
 struct entity                                   
@@ -51,7 +50,7 @@ struct extentity : entity                       // part of the entity that doesn
 
 //extern vector<extentity *> ents;                // map entities
 
-enum { CS_ALIVE = 0, CS_DEAD, CS_SPAWNING, CS_LAGGED, CS_EDITING, CS_SPECTATOR };
+#include "inexor/enumerations/enum_client_states.hpp"
 
 enum { PHYS_FLOAT = 0, PHYS_FALL, PHYS_SLIDE, PHYS_SLOPE, PHYS_FLOOR, PHYS_STEP_UP, PHYS_STEP_DOWN, PHYS_BOUNCE };
 

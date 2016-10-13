@@ -3,11 +3,15 @@
 // no dependencies:
 #include "inexor/enumerations/enum_gun_ids.hpp"
 #include "inexor/enumerations/enum_bot_types.hpp"
-#include "inexor/util/random.hpp"
-#include <algorithm>
+#include "inexor/enumerations/enum_precise_entity_types.hpp"
+
 #include "inexor/classes/itemstats.hpp"
+
 #include "inexor/macros/gamemode_macros.hpp"
 #include "inexor/macros/loop_macros.hpp"
+
+#include "inexor/util/random.hpp"
+#include <algorithm>
 
 
 namespace inexor {

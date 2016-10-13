@@ -31,7 +31,7 @@ namespace server {
             default:
                 return;
         }
-        sendf(-1, 1, "ri4x", N_EXPLODEFX, ci->clientnum, gun, id, ci->ownernum);
+        inexor::server::sendf(-1, 1, "ri4x", N_EXPLODEFX, ci->clientnum, gun, id, ci->ownernum);
         if(gun==GUN_BOMB && ci->state.ammo[GUN_BOMB] < itemstats[GUN_BOMB].max) ci->state.ammo[GUN_BOMB]++; // add a bomb if the bomb explodes
         loopv(hits)
         {
@@ -65,7 +65,7 @@ namespace server {
         if(gun!=GUN_FIST) gs.ammo[gun]--;
         gs.lastshot = millis;
         gs.gunwait = guns[gun].attackdelay;
-        sendf(-1, 1, "rii9x", N_SHOTFX, ci->clientnum, gun, id,
+        inexor::server::sendf(-1, 1, "rii9x", N_SHOTFX, ci->clientnum, gun, id,
               int(from.x*DMF), int(from.y*DMF), int(from.z*DMF),
               int(to.x*DMF), int(to.y*DMF), int(to.z*DMF),
               ci->ownernum);

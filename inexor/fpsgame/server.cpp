@@ -27,12 +27,13 @@
 #include "inexor/classes/clientinfo.hpp"
 
 /// enumerations
-#include "inexor/enumerations/enum_disconnect_reasons.hpp"
+//#include "inexor/enumerations/enum_disconnect_reasons.hpp"
 #include "inexor/enumerations/enum_master_modes.hpp"
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
 
 /// deprecated modules
 #include "inexor/deprecated/old_string.hpp"
+#include "inexor/deprecated/packetbuf.hpp"
 
 /// macros
 #include "inexor/macros/loop_macros.hpp"
@@ -1790,11 +1791,11 @@ namespace server
                         {
                             sents[i].spawntime = 0;
                             sents[i].spawned = true;
-                            sendf(-1, 1, "ri2", N_ITEMSPAWN, i);
+                            inexor::server::sendf(-1, 1, "ri2", N_ITEMSPAWN, i);
                         }
                         else if(sents[i].spawntime<=10000 && oldtime>10000 && (sents[i].type==I_QUAD || sents[i].type==I_BOOST))
                         {
-                            sendf(-1, 1, "ri2", N_ANNOUNCE, sents[i].type);
+                            inexor::server::sendf(-1, 1, "ri2", N_ANNOUNCE, sents[i].type);
                         }
                     }
                 }

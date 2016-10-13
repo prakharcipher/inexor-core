@@ -1,6 +1,5 @@
 #pragma once
 
-/// 
 enum
 {
     PART_BLOOD = 0,
