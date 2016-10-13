@@ -1,31 +1,45 @@
+#include "inexor/fpsgame/game.hpp"
 #include "inexor/util/random.hpp"
 #include "inexor/util/Logging.hpp"
 
+/// new server code
+
+/// modules
+#include "inexor/server/server_administration.hpp"
+#include "inexor/server/server_authentification.hpp"
+#include "inexor/server/server_bots.hpp"
+#include "inexor/server/server_configuration.hpp"
+#include "inexor/server/server_coopedit.hpp"
+#include "inexor/server/server_demos.hpp"
 #include "inexor/server/server_entities.hpp"
-#include "inexor/server/server_gameplay.hpp"
 #include "inexor/server/server_events.hpp"
-#include "inexor/server/server_macros.hpp"
+#include "inexor/server/server_extinfo.hpp"
+#include "inexor/server/server_gamemodes.hpp"
+#include "inexor/server/server_gameplay.hpp"
+#include "inexor/server/server_guns.hpp"
+#include "inexor/server/server_mapvoting.hpp"
+#include "inexor/server/server_masterlist.hpp"
+#include "inexor/server/server_network.hpp"
+#include "inexor/server/server_stats.hpp"
+#include "inexor/server/server_teams.hpp"
+#include "inexor/server/server_win32.hpp"
 
-#include "inexor/classes/demoheader.hpp"
+/// classes
+#include "inexor/classes/clientinfo.hpp"
 
-#include "inexor/deprecated/type_definitions.hpp"
+/// enumerations
+#include "inexor/enumerations/enum_disconnect_reasons.hpp"
 
-#include "inexor/macros/constants.hpp"
-#include "inexor/macros/mastermode_macros.hpp"
+/// macros
 #include "inexor/macros/loop_macros.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
 
-#include "inexor/enumerations/enum_netmsg_ids.hpp"
-#include "inexor/enumerations/enum_master_modes.hpp"
-#include "inexor/enumerations/enum_client_states.hpp"
 
 using namespace inexor::server;
 
 
 namespace game
 {
-    extern bool clientoption(const char *arg);
-    extern bool serveroption(const char *arg);
-
     void parseoptions(vector<const char *> &args)
     {
         loopv(args)
@@ -307,15 +321,6 @@ namespace server
     
     COMMAND(maprotationreset, "");
     COMMANDN(maprotation, addmaprotations, "ss2V");
-
-    struct demofile
-    {
-        string info;
-        uchar *data;
-        int len;
-    };
-
-    vector<demofile> demos;
 
     bool demonextmatch = false;
     stream *demotmp = NULL, *demorecord = NULL, *demoplayback = NULL;

@@ -15,6 +15,7 @@ namespace server {
 
     /// maximal sauer-"string" length.
     #define MAXSTRLEN 260
+
     /// sauer "strings" (char arrays of fixed size).
     typedef char string[MAXSTRLEN];
 
