@@ -120,13 +120,13 @@ template <class T, int MINSIZE = 8> struct vector
 
     T &operator[](int i)
     {
-        ASSERT(i>=0 && i<ulen);
+        assert(i>=0 && i<ulen);
         return buf[i];
     }
 
     const T &operator[](int i) const
     {
-        ASSERT(i >= 0 && i<ulen);
+        assert(i >= 0 && i<ulen);
         return buf[i];
     }
 
@@ -138,14 +138,14 @@ template <class T, int MINSIZE = 8> struct vector
 	
     void shrink(int i)
     {
-        ASSERT(i<=ulen);
+        assert(i<=ulen);
         if(isclass<T>::no) ulen = i;
         else while(ulen>i) drop();
     }
     
     void setsize(int i)
     {
-        ASSERT(i<=ulen);
+        assert(i<=ulen);
         ulen = i;
     }
 
@@ -205,7 +205,7 @@ template <class T, int MINSIZE = 8> struct vector
     void growbuf(int sz)
     {
         int olen = alen;
-        if(!alen) alen = max(MINSIZE, sz);
+        if(!alen) alen = std::max(MINSIZE, sz);
         else while(alen < sz) alen += alen/2;
         if(alen <= olen) return;
         buf = (T *)realloc(buf, alen*sizeof(T));
