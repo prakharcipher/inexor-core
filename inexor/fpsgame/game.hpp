@@ -30,13 +30,6 @@ extern char *radardir;
 
 #include "inexor/enumerations/mastermodes.hpp"
 
-
-/// static strings for server description in master server list
-/// TODO: replace this hardcoded stuff and move on to JSON!
-static const char * const mastermodenames[] =  { "auth",   "open",   "veto",       "locked",     "private",    "password" };
-static const char * const mastermodecolors[] = { "",    COL_GREEN,  COL_YELLOW,   COL_YELLOW,     COL_RED,    COL_RED};
-static const char * const mastermodeicons[] =  { "server", "server", "serverlock", "serverlock", "serverpriv", "serverpriv" };
-
 #include "inexor/enumerations/sound_ids.hpp"
 
 #include "inexor/enumerations/admin_levels.hpp"
