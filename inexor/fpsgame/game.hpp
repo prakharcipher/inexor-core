@@ -71,22 +71,7 @@ static struct gamemodeinfo
 
 #include "inexor/macros/gamemode_macros.hpp"
 
-
-/// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-/// master server list handling
-
-/// master mode status enumeration
-/// TODO: replace this hardcoded stuff and move on to JSON!
-enum 
-{ 
-	MM_AUTH = -1,
-	MM_OPEN = 0,
-	MM_VETO,
-	MM_LOCKED, 
-	MM_PRIVATE, 
-	MM_PASSWORD, 
-	MM_START = MM_AUTH
-};
+#include "inexor/enumerations/mastermodes.hpp"
 
 
 /// static strings for server description in master server list
