@@ -22,26 +22,7 @@ struct fpsentity : extentity
     fpsentity() : triggerstate(TRIGGER_RESET), lasttrigger(0) {} 
 };
 
-/// static gun and projectile enumeration
-/// TODO: replace this hardcoded stuff and move on to JSON!
-enum 
-{
-	GUN_FIST = 0,	/// fist
-	GUN_SG,			/// shotgun
-	GUN_CG,			/// 
-	GUN_RL,			/// rocket launcher
-	GUN_RIFLE,		/// rifle
-	GUN_GL,			/// grenade launcher
-	GUN_PISTOL,		/// pistol
-	GUN_BOMB,		/// BOMBERMAN gamemode: bomb
-	GUN_FIREBALL,	/// monster/bot: fireball
-	GUN_ICEBALL,	/// monster/bot: iceball
-	GUN_SLIMEBALL,	/// monster/bot: slimeball
-	GUN_BITE,		/// bite
-	GUN_BARREL,		/// barrel damage
-	GUN_SPLINTER,	/// splinter
-	NUMGUNS         /// 
-};
+#include "inexor/enumerations/gun_ids.hpp"
 
 
 /// armour type enumeration... take 20/40/60 % off
