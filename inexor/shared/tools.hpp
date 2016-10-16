@@ -64,55 +64,11 @@ INEXOR_FUNCTION_ALIAS(rnd, inexor::util::rnd<int>);
 INEXOR_FUNCTION_ALIAS(rndscale, inexor::util::rnd<float>);
 INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
 
-/// "for"-loop macro definitions
-/// DEPRECATED: Use c++ range based loops instead
-#define loop(v,m) for(int v = 0; v < int(m); ++v)
-#define loopi(m) loop(i,m)
-#define loopj(m) loop(j,m)
-#define loopk(m) loop(k,m)
-#define loopl(m) loop(l,m)
-#define looprev(v,m) for(int v = int(m); --v >= 0;)
-#define loopirev(m) looprev(i,m)
-#define loopjrev(m) looprev(j,m)
-#define loopkrev(m) looprev(k,m)
-#define looplrev(m) looprev(l,m)
+#include "inexor/macros/loop_macros.hpp"
 
+#include "inexor/deprecated/memfree.hpp"
 
-/// Delete Pointer, Wrapper around delete, sets pointer to NULL afterwards(!).
-#define DELETEP(p) if(p) { delete   p; p = 0; }
-
-/// Delete Array, Wrapper around delete[], sets pointer to NULL afterwards(!).
-#define DELETEA(p) if(p) { delete[] p; p = 0; }
-
-// some important mathematical constants:
-#define PI  (3.1415927f)
-#define PI2 (2*PI)
-#define SQRT2 (1.4142136f)
-#define SQRT3 (1.7320508f)
-#define RAD (PI / 180.0f)
-
-
-// some more (precise) mathematical constants
-#ifdef WIN32
-  #ifndef M_PI
-    #define M_PI 3.14159265358979323846
-  #endif
-  #ifndef M_LN2
-    #define M_LN2 0.693147180559945309417
-  #endif
-  /// Compare Strings, ignore case.
-  #define strcasecmp _stricmp
-  #define strncasecmp _strnicmp
-  /// Path divide character, \ on win, otherwise /.
-  #define PATHDIV '\\'
-#else
-  // adapt macros to OS specifications
-  #define __cdecl
-  #define _vsnprintf vsnprintf
-  /// Path divide character, \ on win, otherwise /.
-  #define PATHDIV '/'
-#endif
-
+#include "inexor/deprecated/math_constants.hpp"
 
 #ifdef __GNUC__
   #define PRINTFARGS(fmt, args) __attribute__((format(printf, fmt, args)))
