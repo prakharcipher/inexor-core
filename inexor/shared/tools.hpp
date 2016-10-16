@@ -76,13 +76,7 @@ INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
 
 #include "inexor/classes/packetbuf.hpp"
 
-/// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-/// sorting algorithms templates
-
-/// convert to float (?)
-/// clever way to avoid static_casts (?)
-template<class T>
-static inline float heapscore(const T &n) { return n; }
+#include "inexor/templates/heapscore.hpp"
 
 struct sortless
 {
