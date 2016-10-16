@@ -8,7 +8,7 @@ static struct gamemodeinfo
     int flags;        /// a bitmask container (see flags above)
 };
 
-gamemodeinfo gamemodes[] =
+static gamemodeinfo gamemodes[] =
 {
     { "SP", M_LOCAL | M_CLASSICSP},
     { "DMSP", M_LOCAL | M_DMSP},
