@@ -24,14 +24,7 @@ struct fpsentity : extentity
 
 #include "inexor/enumerations/gun_ids.hpp"
 
-
-/// armour type enumeration... take 20/40/60 % off
-enum 
-{
-	A_BLUE,
-	A_GREEN,
-	A_YELLOW
-};
+#include "inexor/enumerations/armor_types.hpp"
 
 /// Artificial intelligence: BOT states
 /// "Artificial intelligence is the perpetuum mobile of computer science"
