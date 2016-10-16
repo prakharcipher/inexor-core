@@ -42,14 +42,6 @@ extern char *radardir;
 
 #include "inexor/enumerations/team_category.hpp"
 
-/// const radar blip colors
-static const char * const teamblipcolor[TEAM_NUM] = 
-{
-    "_neutral", /// = 'gray'
-    "_blue",
-    "_red"
-};
-
 #include "inexor/enumerations/hud_icons.hpp"
 
 #include "inexor/enumerations/bomberman_hud_announces.hpp"
