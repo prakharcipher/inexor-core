@@ -153,14 +153,6 @@ inline char *newstring(size_t l)                { return new char[l+1]; }
 inline char *newstring(const char *s, size_t l) { return copystring(newstring(l), s, l+1); }
 inline char *newstring(const char *s)           { size_t l = strlen(s); char *d = newstring(l); memcpy(d, s, l+1); return d; }
 
-/// macros for looping though vectors
-/// loop macros are deprecated and should not be used anymore.
-#define loopv(v)    for(int i = 0; i<(v).length(); i++)
-#define loopvj(v)   for(int j = 0; j<(v).length(); j++)
-#define loopvk(v)   for(int k = 0; k<(v).length(); k++)
-#define loopvrev(v) for(int i = (v).length()-1; i>=0; i--)
-
-
 /// template implementation of buffers (networking e.g.).
 /// work like streams: you put stuff at the end, you get stuff from the end
 template <class T>
