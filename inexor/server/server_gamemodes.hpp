@@ -3,6 +3,13 @@
 /// gamemode byteflag
 #include "inexor/enumerations/enum_gamemode_bitmask.hpp"
 
+#define SERVMODE 1
+#include "inexor/fpsgame/capture.hpp"
+#include "inexor/fpsgame/ctf.hpp"
+#include "inexor/fpsgame/collect.hpp"
+#include "inexor/fpsgame/bomb.hpp"
+#include "inexor/fpsgame/hideandseek.hpp"
+
 namespace inexor {
 namespace server {
 
@@ -48,7 +55,12 @@ namespace server {
         { "bomberman team", M_LMS | M_BOMB | M_TEAM | M_OBSTACLES},
         { "hideandseek"},
     };
-
+    
+    captureservmode capturemode;
+    ctfservmode ctfmode;
+    collectservmode collectmode;
+    bombservmode bombmode;
+    hideandseekservmode hideandseekmode;
 
 };
 };

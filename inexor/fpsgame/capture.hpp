@@ -1,3 +1,23 @@
+// dependencies
+#include "inexor/enumerations/enum_precise_entity_types.hpp"
+#include "inexor/enumerations/enum_netmsg_ids.hpp"
+#include "inexor/enumerations/enum_client_states.hpp"
+#include "inexor/enumerations/enum_armor_types.hpp"
+#include "inexor/macros/loop_macros.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/shared/tools.hpp"
+#include "inexor/deprecated/fixed_geom.hpp"
+#include "inexor/classes/servmode.hpp"
+#include "inexor/classes/teamscore.hpp"
+#include "inexor/classes/clientinfo.hpp"
+
+/// Try to avoid "using namespace inexor::server"
+using inexor::server::vec;
+using inexor::server::teamscore;
+using inexor::server::servmode;
+
+extern ENetPacket *sendf(int cn, int chan, const char *format, ...);
+
 // capture.h: client and server state for capture gamemode
 #ifndef PARSEMESSAGES
 

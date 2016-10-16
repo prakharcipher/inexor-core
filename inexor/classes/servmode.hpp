@@ -1,5 +1,8 @@
 #pragma once
 
+#include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/classes/clientinfo.hpp"
+
 namespace inexor {
 namespace server {
 

@@ -3,7 +3,7 @@
 #include "inexor/enumerations/enum_sound_ids.hpp"
 #include "inexor/enumerations/enum_hudicon_ids.hpp"
 #include "inexor/enumerations/enum_gun_ids.hpp"
-#include "inexor/enumerations/enum_armor_ids.hpp"
+#include "inexor/enumerations/enum_armor_types.hpp"
 #include "inexor/enumerations/enum_netmsg_ids.hpp"
 #include "inexor/enumerations/enum_entity_types.hpp"
 

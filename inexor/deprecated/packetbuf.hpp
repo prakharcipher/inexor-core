@@ -1,5 +1,7 @@
 #pragma once
 
+#include <enet/enet.h>
+
 /// network packet buffer
 struct packetbuf : ucharbuf
 {

@@ -41,21 +41,17 @@ namespace server {
     #define m_teammode     (m_check(gamemode, M_TEAM))
     #define m_overtime     (m_check(gamemode, M_OVERTIME))
     #define isteam(a,b)    (m_teammode && strcmp(a, b)==0)
-
     #define m_lms          (m_check(gamemode, M_LMS))
     #define m_bomb         (m_check(gamemode, M_BOMB))
     #define m_hideandseek  (m_check(gamemode, M_HIDEANDSEEK))
-
     #define m_obstacles    (m_check(gamemode, M_OBSTACLES))
     #define m_timeforward  (m_check(gamemode, M_TIMEFORWARD))
-
     #define m_demo         (m_check(gamemode, M_DEMO))
     #define m_edit         (m_check(gamemode, M_EDIT))
     #define m_lobby        (m_check(gamemode, M_LOBBY))
     #define m_timed        (m_checknot(gamemode, M_DEMO|M_EDIT|M_LOCAL))
     #define m_botmode      (m_checknot(gamemode, M_DEMO|M_LOCAL))
     #define m_mp(mode)     (m_checknot(mode, M_LOCAL))
-
     #define m_sp           (m_check(gamemode, M_DMSP | M_CLASSICSP))
     #define m_dmsp         (m_check(gamemode, M_DMSP))
     #define m_classicsp    (m_check(gamemode, M_CLASSICSP))

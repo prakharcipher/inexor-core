@@ -1,6 +1,7 @@
 #pragma once
 
 #include "inexor/deprecated/swap_bytes_template.hpp"
+#include <SDL_rwops.h>
 
 /// 
 struct stream
@@ -44,7 +45,8 @@ struct stream
     template<class T> T getlil() { return lilswap(get<T>()); }
     template<class T> T getbig() { return bigswap(get<T>()); }
 
-#ifndef STANDALONE
-    SDL_RWops *rwops();
-#endif
+    #ifndef STANDALONE
+        SDL_RWops *rwops();
+    #endif
+
 };
