@@ -82,8 +82,7 @@ static const char * const mastermodeicons[] =  { "server", "server", "serverlock
 
 #include "inexor/enumerations/sound_ids.hpp"
 
-/// priviledge levels
-enum {PRIV_NONE = 0, PRIV_MASTER, PRIV_AUTH, PRIV_ADMIN };
+#include "inexor/enumerations/admin_levels.hpp"
 
 
 // network messages codes, c2s, c2c, s2c:
