@@ -86,19 +86,7 @@ INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
 
 #include "inexor/templates/quicksort.hpp"
 
-
-/// I have no idea what that is supposed to be...
-/// Is it checking if a data type is a class ??
-template<class T> struct isclass
-{
-    template<class C> static char test(void (C::*)(void));
-    template<class C> static int test(...);
-    enum 
-	{
-		yes = sizeof(test<T>(0)) == 1 ? 1 : 0,
-		no = yes^1
-	};
-};
+#include "inexor/deprecated/isclass.hpp"
 
 /// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 /// sorting algorithms templates
