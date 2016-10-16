@@ -14,13 +14,7 @@ extern char *radardir;
 
 #include "inexor/enumerations/trigger_states.hpp"
 
-
-/// trigger handler
-struct fpsentity : extentity
-{
-    int triggerstate, lasttrigger;
-    fpsentity() : triggerstate(TRIGGER_RESET), lasttrigger(0) {} 
-};
+#include "inexor/classes/fpsentity.hpp"
 
 #include "inexor/enumerations/gun_ids.hpp"
 
