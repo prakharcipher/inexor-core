@@ -26,18 +26,7 @@ struct fpsentity : extentity
 
 #include "inexor/enumerations/armor_types.hpp"
 
-/// Artificial intelligence: BOT states
-/// "Artificial intelligence is the perpetuum mobile of computer science"
-enum 
-{ 
-	M_NONE = 0,
-	M_SEARCH,
-	M_HOME,
-	M_ATTACKING,
-	M_PAIN,
-	M_SLEEP,
-	M_AIMING
-};  
+#include "inexor/enumerations/ai_modes.hpp"
 
 
 /// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
