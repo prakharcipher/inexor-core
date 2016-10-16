@@ -38,14 +38,7 @@ extern char *radardir;
 
 #include "inexor/enumerations/netmsg_sizes.hpp"
 
-
-/// demos contain stored network messages of a game
-/// which can be replayed to review games
-struct demoheader
-{
-    char magic[16];
-    int version, protocol;
-};
+#include "inexor/classes/demoheader.hpp"
 
 #include "inexor/enumerations/team_category.hpp"
 
