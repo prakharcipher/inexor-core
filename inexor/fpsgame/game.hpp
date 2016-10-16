@@ -97,14 +97,7 @@ struct demoheader
     int version, protocol;
 };
 
-
-enum
-{
-    TEAM_NONE,
-    TEAM_OWN,
-    TEAM_OPPONENT,
-    TEAM_NUM
-};
+#include "inexor/enumerations/team_category.hpp"
 
 /// const radar blip colors
 static const char * const teamblipcolor[TEAM_NUM] = 
