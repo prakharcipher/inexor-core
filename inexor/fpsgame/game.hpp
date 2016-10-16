@@ -58,11 +58,7 @@ extern char *radardir;
 
 #include "inexor/classes/teamscore.hpp"
 
-
-/// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-/// entity handling
-/// entity system will be replaced with new entity system later...
-
+/// extern declarations for entity related code
 namespace entities
 {
     extern vector<extentity *> ents;
@@ -89,9 +85,7 @@ namespace entities
     extern void repammo(fpsent *d, int type, bool local = true);
 }
 
-/// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-/// full game handling
-
+/// extern declarations for game related code
 namespace game
 {
     struct scoregroup : teamscore
@@ -332,9 +326,7 @@ namespace game
     extern vec hudgunorigin(int gun, const vec &from, const vec &to, fpsent *d);
 }
 
-/// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-/// (local) dedicated server handling
-
+/// extern declarations for server related code
 namespace server
 {
     extern const char *modename(int n, const char *unknown = "unknown");
@@ -351,4 +343,3 @@ namespace server
     extern bool serveroption(const char *arg);
     extern bool delayspawn(int type);
 }
-
