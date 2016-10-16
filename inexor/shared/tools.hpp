@@ -80,12 +80,7 @@ INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
 
 #include "inexor/classes/sortless.hpp"
 
-struct sortnameless
-{
-    template<class T> bool operator()(const T &x, const T &y) const { return sortless()(x.name, y.name); }
-    template<class T> bool operator()(T *x, T *y) const { return sortless()(x->name, y->name); }
-    template<class T> bool operator()(const T *x, const T *y) const { return sortless()(x->name, y->name); }
-};
+#include "inexor/classes/sortnameless.hpp"
 
 /// there are various sorting algorithms known
 /// please gain some knowledge about them before using these functions
