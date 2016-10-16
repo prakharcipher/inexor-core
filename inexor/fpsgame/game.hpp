@@ -12,16 +12,7 @@ extern char *radardir;
 
 #include "inexor/enumerations/entity_types.hpp"
 
-/// (door) triggers in singleplayer maps (sp and dmsp game modes)
-/// @warning may becomes deprecated if visual scripting will be implemented one day...
-enum
-{
-    TRIGGER_RESET = 0,
-    TRIGGERING,
-    TRIGGERED,
-    TRIGGER_RESETTING,
-    TRIGGER_DISAPPEARED
-};
+#include "inexor/enumerations/trigger_states.hpp"
 
 
 /// trigger handler
