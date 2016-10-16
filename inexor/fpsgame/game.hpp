@@ -1,13 +1,4 @@
-/// @file game.h
-/// definitions of network protocol, game modes, entities, guns, monsters, mastermode
-/// pickups, triggers, team scores, armour, permission levels, 
-///
-///
-///
-
-/// include guard protectes this file from being included twice
-#ifndef __GAME_H__
-#define __GAME_H__
+#pragma once
 
 #include "inexor/shared/cube.hpp"
 #include "inexor/util/Logging.hpp"
@@ -1329,6 +1320,4 @@ namespace server
     extern bool serveroption(const char *arg);
     extern bool delayspawn(int type);
 }
-
-#endif /// __GAME_H__
 
