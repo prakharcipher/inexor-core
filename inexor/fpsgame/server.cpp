@@ -28,15 +28,7 @@ namespace server
     struct clientinfo;
     int gamemode = 0;
 
-    struct gameevent
-    {
-        virtual ~gameevent() {}
-
-        virtual bool flush(clientinfo *ci, int fmillis);
-        virtual void process(clientinfo *ci) {}
-
-        virtual bool keepable() const { return false; }
-    };
+    #include "inexor/classes/gameevent.hpp"
 
     struct timedevent : gameevent
     {
