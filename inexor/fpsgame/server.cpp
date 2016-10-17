@@ -43,12 +43,12 @@ namespace server
     struct clientinfo;
     int gamemode = 0;
 
-    #include "inexor/classes/gameevent.hpp"
-    #include "inexor/classes/timedevent.hpp"
-    #include "inexor/classes/shotevent.hpp"
-    #include "inexor/classes/explodeevent.hpp"
-    #include "inexor/classes/suicideevent.hpp"
-    #include "inexor/classes/pickupevent.hpp"
+    #include "inexor/classes/events/gameevent.hpp"
+    #include "inexor/classes/events/timedevent.hpp"
+    #include "inexor/classes/events/shotevent.hpp"
+    #include "inexor/classes/events/explodeevent.hpp"
+    #include "inexor/classes/events/suicideevent.hpp"
+    #include "inexor/classes/events/pickupevent.hpp"
     #include "inexor/classes/gamestate.hpp"
     #include "inexor/classes/savedscore.hpp"
     #include "inexor/classes/clientinfo.hpp"
