@@ -38,10 +38,7 @@ namespace server
 
     #include "inexor/classes/explodeevent.hpp"
 
-    struct suicideevent : gameevent
-    {
-        void process(clientinfo *ci);
-    };
+    #include "inexor/classes/suicideevent.hpp"
 
     struct pickupevent : gameevent
     {
