@@ -1,11 +1,16 @@
 #pragma once
 
-/// 
-struct shotevent : timedevent
-{
-    int id, gun;
-    vec from, to;
-    vector<hitinfo> hits;
+namespace server {
 
-    void process(clientinfo *ci);
+
+    /// 
+    struct shotevent : timedevent
+    {
+        int id, gun;
+        vec from, to;
+        vector<hitinfo> hits;
+
+        void process(clientinfo *ci);
+    };
+
 };

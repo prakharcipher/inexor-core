@@ -1,7 +1,11 @@
 #pragma once
 
-/// 
-struct suicideevent : gameevent
-{
-    void process(clientinfo *ci);
+namespace server {
+
+    /// 
+    struct suicideevent : gameevent
+    {
+        void process(clientinfo *ci);
+    };
+
 };

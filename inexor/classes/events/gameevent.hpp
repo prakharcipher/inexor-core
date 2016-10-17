@@ -1,12 +1,18 @@
 #pragma once
 
-/// 
-struct gameevent
-{
-    virtual ~gameevent() {}
+namespace server {
 
-    virtual bool flush(clientinfo *ci, int fmillis);
-    virtual void process(clientinfo *ci) {}
+    struct clientinfo;
+    
+    /// 
+    struct gameevent
+    {
+        virtual ~gameevent() {}
 
-    virtual bool keepable() const { return false; }
+        virtual bool flush(clientinfo *ci, int fmillis);
+        virtual void process(clientinfo *ci) {}
+
+        virtual bool keepable() const { return false; }
+    };
+
 };

@@ -1,9 +1,13 @@
 #pragma once
 
-/// 
-struct pickupevent : gameevent
-{
-    int ent;
+namespace server {
 
-    void process(clientinfo *ci);
+    /// 
+    struct pickupevent : gameevent
+    {
+        int ent;
+
+        void process(clientinfo *ci);
+    };
+
 };

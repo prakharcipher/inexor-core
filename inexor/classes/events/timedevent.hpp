@@ -1,9 +1,13 @@
 #pragma once
 
-/// 
-struct timedevent : gameevent
-{
-    int millis;
+namespace server {
 
-    bool flush(clientinfo *ci, int fmillis);
+    /// 
+    struct timedevent : gameevent
+    {
+        int millis;
+
+        bool flush(clientinfo *ci, int fmillis);
+    };
+
 };

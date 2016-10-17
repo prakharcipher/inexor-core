@@ -1,12 +1,16 @@
 #pragma once
 
-/// 
-struct explodeevent : timedevent
-{
-    int id, gun;
-    vector<hitinfo> hits;
+namespace server {
 
-    bool keepable() const { return true; }
+    /// 
+    struct explodeevent : timedevent
+    {
+        int id, gun;
+        vector<hitinfo> hits;
 
-    void process(clientinfo *ci);
+        bool keepable() const { return true; }
+
+        void process(clientinfo *ci);
+    };
+
 };
