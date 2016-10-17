@@ -45,14 +45,7 @@ namespace server
         bool flush(clientinfo *ci, int fmillis);
     };
 
-    struct hitinfo
-    {
-        int target;
-        int lifesequence;
-        int rays;
-        float dist;
-        vec dir;
-    };
+    #include "inexor/classes/hitinfo.hpp"
 
     struct shotevent : timedevent
     {
