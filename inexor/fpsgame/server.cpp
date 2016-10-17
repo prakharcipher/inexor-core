@@ -36,15 +36,7 @@ namespace server
 
     #include "inexor/classes/shotevent.hpp"
 
-    struct explodeevent : timedevent
-    {
-        int id, gun;
-        vector<hitinfo> hits;
-
-        bool keepable() const { return true; }
-
-        void process(clientinfo *ci);
-    };
+    #include "inexor/classes/explodeevent.hpp"
 
     struct suicideevent : gameevent
     {
