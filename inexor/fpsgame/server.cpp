@@ -1871,11 +1871,6 @@ namespace server
         if (m_lms) checklms();
     }
 
-    void suicideevent::process(clientinfo *ci)
-    {
-        suicide(ci);
-    }
-
     void explodeevent::process(clientinfo *ci)
     {
         gamestate &gs = ci->state;
