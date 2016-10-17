@@ -30,12 +30,7 @@ namespace server
 
     #include "inexor/classes/gameevent.hpp"
 
-    struct timedevent : gameevent
-    {
-        int millis;
-
-        bool flush(clientinfo *ci, int fmillis);
-    };
+    #include "inexor/classes/timedevent.hpp"
 
     #include "inexor/classes/hitinfo.hpp"
 
