@@ -1989,13 +1989,7 @@ namespace server
         changemap(rot.map, rot.findmode(gamemode));
     }
     
-    struct votecount
-    {
-        char *map;
-        int mode, count;
-        votecount() {}
-        votecount(char *s, int n) : map(s), mode(n), count(0) {}
-    };
+    #include "inexor/classes/votecount.hpp"
 
     void checkvotes(bool force = false)
     {
