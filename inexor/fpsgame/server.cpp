@@ -18,12 +18,19 @@
 #include "inexor/classes/teamkillkick.hpp"
 #include "inexor/classes/teamkillinfo.hpp"
 #include "inexor/classes/worldstate.hpp"
+
 #include "inexor/classes/events/gameevent.hpp"
 #include "inexor/classes/events/timedevent.hpp"
 #include "inexor/classes/events/shotevent.hpp"
 #include "inexor/classes/events/explodeevent.hpp"
 #include "inexor/classes/events/suicideevent.hpp"
 #include "inexor/classes/events/pickupevent.hpp"
+
+#include "inexor/classes/gamestate.hpp"
+#include "inexor/classes/savedscore.hpp"
+#include "inexor/classes/clientinfo.hpp"
+#include "inexor/classes/servmode.hpp"
+
 
 namespace game
 {
@@ -48,11 +55,6 @@ namespace server
     static const int DEATHMILLIS = 300;
     struct clientinfo;
     int gamemode = 0;
-
-    #include "inexor/classes/gamestate.hpp"
-    #include "inexor/classes/savedscore.hpp"
-    #include "inexor/classes/clientinfo.hpp"
-    #include "inexor/classes/servmode.hpp"
 
     extern void connected(clientinfo *ci);
     int welcomepacket(packetbuf &p, clientinfo *ci);
