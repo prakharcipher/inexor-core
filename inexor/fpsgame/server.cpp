@@ -1241,14 +1241,8 @@ namespace server
 
     #include "inexor/classes/userkey.hpp"
 
-    struct userinfo : userkey
-    {
-        void *pubkey;
-        int privilege;
+    #include "inexor/classes/userinfo.hpp"
 
-        userinfo() : pubkey(NULL), privilege(PRIV_NONE) {}
-        ~userinfo() { delete[] name; delete[] desc; if(pubkey) freepubkey(pubkey); }
-    };
     hashset<userinfo> users;
 
     void adduser(char *name, char *desc, char *pubkey, char *priv)
