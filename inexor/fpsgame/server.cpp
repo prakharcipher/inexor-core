@@ -883,14 +883,7 @@ namespace server
         }
     }
 
-    struct teamrank
-    {
-        const char *name;
-        float rank;
-        int clients;
-
-        teamrank(const char *name) : name(name), rank(0), clients(0) {}
-    };
+    #include "inexor/classes/teamrank.hpp"
 
     const char *chooseworstteam(const char *suggest = NULL, clientinfo *exclude = NULL)
     {
