@@ -64,12 +64,14 @@ INEXOR_FUNCTION_ALIAS(rnd, inexor::util::rnd<int>);
 INEXOR_FUNCTION_ALIAS(rndscale, inexor::util::rnd<float>);
 INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
 
+/// DEPRECATED: Do not use loop macros at all!
 #include "inexor/macros/loop_macros.hpp"
 
 #include "inexor/deprecated/memfree.hpp"
 
 #include "inexor/deprecated/math_constants.hpp"
 
+/// DEPRECATED: use std::string instead!
 #include "inexor/deprecated/string.hpp"
 
 #include "inexor/templates/databuf.hpp"
@@ -82,186 +84,24 @@ INEXOR_FUNCTION_ALIAS(detrnd, inexor::util::deterministic_rnd<int>);
 
 #include "inexor/classes/sortnameless.hpp"
 
+/// DEPRECATED: use std::sort instead!
 #include "inexor/templates/insertionsort.hpp"
-
 #include "inexor/templates/quicksort.hpp"
 
 #include "inexor/deprecated/isclass.hpp"
 
+/// DEPRECATED: use std::map instead!
 #include "inexor/deprecated/hashset.hpp"
 
+/// DEPRECATED: use std::vector instead!
 #include "inexor/deprecated/vector.hpp"
 
+/// DEPRECATED: Use std::deque instead!
+#include "inexor/deprecated/queue.hpp"
 
-// manual implementation of queues
-// DEPRECATED! please use std::deque instead!
-template <class T, int SIZE> struct queue
-{
-    int head, tail, len;
-    T data[SIZE];
+#include "inexor/deprecated/byteswap.hpp"
 
-    queue() { clear(); }
-
-    void clear() { head = tail = len = 0; }
-
-    int length() const { return len; }
-    bool empty() const { return !len; }
-    bool full() const { return len == SIZE; }
-
-    bool inrange(size_t i) const { return i<size_t(len); }
-    bool inrange(int i) const { return i>=0 && i<len; }
-
-    T &added() { return data[tail > 0 ? tail-1 : SIZE-1]; }
-    T &added(int offset) { return data[tail-offset > 0 ? tail-offset-1 : tail-offset-1 + SIZE]; }
-    T &adding() { return data[tail]; }
-    T &adding(int offset) { return data[tail+offset >= SIZE ? tail+offset - SIZE : tail+offset]; }
-    T &add()
-    {
-        T &t = data[tail];
-        tail++;
-        if(tail >= SIZE) tail -= SIZE;
-        if(len < SIZE) len++;
-        return t;
-    }
-    T &add(const T &e) { return add() = e; }
-
-    T &pop()
-    {
-        tail--;
-        if(tail < 0) tail += SIZE;
-        len--;
-        return data[tail];
-    }
-
-    T &removing() { return data[head]; }
-    T &removing(int offset) { return data[head+offset >= SIZE ? head+offset - SIZE : head+offset]; }
-    T &remove()
-    {
-        T &t = data[head];
-        head++;
-        if(head >= SIZE) head -= SIZE;
-        len--; 
-        return t;
-    }
-
-    T &operator[](int offset) { return removing(offset); }
-    const T &operator[](int offset) const { return removing(offset); }
-};
-
-
-/// reversequeue is the same as std::deque
-template <class T, int SIZE> struct reversequeue : queue<T, SIZE>
-{
-    T &operator[](int offset) { return queue<T, SIZE>::added(offset); }
-    const T &operator[](int offset) const { return queue<T, SIZE>::added(offset); }
-};
-
-const int islittleendian = 1;
-
-#ifdef SDL_BYTEORDER
-  #define endianswap16 SDL_Swap16
-  #define endianswap32 SDL_Swap32
-  #define endianswap64 SDL_Swap64
-#else
-  inline ushort endianswap16(ushort n) { return (n<<8) | (n>>8); }
-  inline uint endianswap32(uint n) { return (n<<24) | (n>>24) | ((n>>8)&0xFF00) | ((n<<8)&0xFF0000); }
-  inline ullong endianswap64(ullong n) { return endianswap32(uint(n >> 32)) | ((ullong)endianswap32(uint(n)) << 32); }
-#endif
-  template<class T> inline T endianswap(T n) { union { T t; uint i; } conv; conv.t = n; conv.i = endianswap32(conv.i); return conv.t; }
-  template<> inline ushort endianswap<ushort>(ushort n) { return endianswap16(n); }
-  template<> inline short endianswap<short>(short n) { return endianswap16(n); }
-  template<> inline uint endianswap<uint>(uint n) { return endianswap32(n); }
-  template<> inline int endianswap<int>(int n) { return endianswap32(n); }
-  template<> inline ullong endianswap<ullong>(ullong n) { return endianswap64(n); }
-  template<> inline llong endianswap<llong>(llong n) { return endianswap64(n); }
-  template<> inline double endianswap<double>(double n) { union { double t; uint i; } conv; conv.t = n; conv.i = endianswap64(conv.i); return conv.t; }
-  template<class T> inline void endianswap(T *buf, size_t len) { for(T *end = &buf[len]; buf < end; buf++) *buf = endianswap(*buf); }
-  template<class T> inline T endiansame(T n) { return n; }
-  template<class T> inline void endiansame(T *buf, size_t len) {}
-#ifdef SDL_BYTEORDER
-  #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-    #define lilswap endiansame
-    #define bigswap endianswap
-  #else
-    #define lilswap endianswap
-    #define bigswap endiansame
-  #endif
-#else
-  template<class T> inline T lilswap(T n) { return *(const uchar *)&islittleendian ? n : endianswap(n); }
-  template<class T> inline void lilswap(T *buf, size_t len) { if(!*(const uchar *)&islittleendian) endianswap(buf, len); }
-  template<class T> inline T bigswap(T n) { return *(const uchar *)&islittleendian ? endianswap(n) : n; }
-  template<class T> inline void bigswap(T *buf, size_t len) { if(*(const uchar *)&islittleendian) endianswap(buf, len); }
-#endif
-
-
-// workaround for some C platforms that have these two functions as macros - not used anywhere
-#ifdef getchar
-  #undef getchar
-#endif
-#ifdef putchar
-  #undef putchar
-#endif
-
-struct stream
-{
-#ifdef WIN32
-#ifdef __GNUC__
-    typedef off64_t offset;
-#else
-    typedef __int64 offset;
-#endif
-#else
-    typedef off_t offset;
-#endif
-
-    virtual ~stream() {}
-    virtual void close() = 0;
-    virtual bool end() = 0;
-    virtual offset tell() { return -1; }
-    virtual offset rawtell() { return tell(); }
-    virtual bool seek(offset pos, int whence = SEEK_SET) { return false; }
-    virtual offset size();
-    virtual offset rawsize() { return size(); }
-    virtual size_t read(void *buf, size_t len) { return 0; }
-    virtual size_t write(const void *buf, size_t len) { return 0; }
-    virtual bool flush() { return true; }
-    virtual int getchar() { uchar c; return read(&c, 1) == 1 ? c : -1; }
-    virtual bool putchar(int n) { uchar c = n; return write(&c, 1) == 1; }
-    virtual bool getline(char *str, size_t len);
-    virtual bool putstring(const char *str) { size_t len = strlen(str); return write(str, len) == len; }
-    virtual bool putline(const char *str) { return putstring(str) && putchar('\n'); }
-    virtual size_t printf(const char *fmt, ...) PRINTFARGS(2, 3);
-    virtual uint getcrc() { return 0; }
-
-    template<class T> size_t put(const T *v, size_t n) { return write(v, n*sizeof(T))/sizeof(T); } 
-    template<class T> bool put(T n) { return write(&n, sizeof(n)) == sizeof(n); }
-    template<class T> bool putlil(T n) { return put<T>(lilswap(n)); }
-    template<class T> bool putbig(T n) { return put<T>(bigswap(n)); }
-
-    template<class T> size_t get(T *v, size_t n) { return read(v, n*sizeof(T))/sizeof(T); }
-    template<class T> T get() { T n; return read(&n, sizeof(n)) == sizeof(n) ? n : 0; }
-    template<class T> T getlil() { return lilswap(get<T>()); }
-    template<class T> T getbig() { return bigswap(get<T>()); }
-
-#ifndef STANDALONE
-    SDL_RWops *rwops();
-#endif
-};
-
-template<class T>
-struct streambuf
-{
-    stream *s;
-
-    streambuf(stream *s) : s(s) {}
-
-    T get() { return s->get<T>(); }
-    size_t get(T *vals, size_t numvals) { return s->get(vals, numvals); }
-    void put(const T &val) { s->put(&val, 1); }
-    void put(const T *vals, size_t numvals) { s->put(vals, numvals); } 
-    size_t length() { return s->size(); }
-};
-
+#include "inexor/deprecated/stream.hpp"
 
 /// bitmask for text formatting (?)
 enum
