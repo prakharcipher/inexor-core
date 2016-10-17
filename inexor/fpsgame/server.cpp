@@ -2453,15 +2453,7 @@ namespace server
         sendf(-1, 1, "ri3", N_SPECTATOR, ci->clientnum, 1);
     }
 
-    struct crcinfo
-    {
-        int crc, matches;
-
-        crcinfo() {}
-        crcinfo(int crc, int matches) : crc(crc), matches(matches) {}
-
-        static bool compare(const crcinfo &x, const crcinfo &y) { return x.matches > y.matches; }
-    };
+    #include "inexor/classes/crcinfo.hpp"
 
     VAR(modifiedmapspectator, 0, 1, 2);
 
