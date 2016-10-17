@@ -21,12 +21,7 @@ extern ENetAddress masteraddress;
 
 namespace server
 {
-    struct server_entity            // server side version of "entity" type
-    {
-        int type;
-        int spawntime;
-        bool spawned;
-    };
+    #include "inexor/classes/server_entity.hpp"
 
     static const int DEATHMILLIS = 300;
 
