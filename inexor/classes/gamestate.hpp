@@ -1,69 +1,75 @@
 #pragma once
 
-/// 
-struct gamestate : fpsstate
-{
-    vec o;
-    int state, editstate;
-    int lastdeath, deadflush, lastspawn, lifesequence;
-    int lastshot;
-    projectilestate<8> rockets, grenades, bombs;
-    int frags, flags, deaths, teamkills, 
-        shotdamage, //all damage your shots could have made
-        damage, tokens;
-    int lasttimeplayed, timeplayed;
-    float effectiveness;
+namespace server {
 
-    gamestate() : state(CS_DEAD), editstate(CS_DEAD), lifesequence(0) {}
+    extern const int DEATHMILLIS;
 
-    bool isalive(int gamemillis)
+    /// 
+    struct gamestate : fpsstate
     {
-        return state==CS_ALIVE || (state==CS_DEAD && gamemillis - lastdeath <= DEATHMILLIS);
-    }
+        vec o;
+        int state, editstate;
+        int lastdeath, deadflush, lastspawn, lifesequence;
+        int lastshot;
+        projectilestate<8> rockets, grenades, bombs;
+        int frags, flags, deaths, teamkills, 
+            shotdamage, //all damage your shots could have made
+            damage, tokens;
+        int lasttimeplayed, timeplayed;
+        float effectiveness;
 
-    bool waitexpired(int gamemillis)
-    {
-        return gamemillis - lastshot >= gunwait;
-    }
+        gamestate() : state(CS_DEAD), editstate(CS_DEAD), lifesequence(0) {}
 
-    void reset()
-    {
-        if(state!=CS_SPECTATOR) state = editstate = CS_DEAD;
-        maxhealth = 100;
-        rockets.reset();
-        grenades.reset();
-        bombs.reset();
+        bool isalive(int gamemillis)
+        {
+            return state==CS_ALIVE || (state==CS_DEAD && gamemillis - lastdeath <= DEATHMILLIS);
+        }
 
-        timeplayed = 0;
-        effectiveness = 0;
-        frags = flags = deaths = teamkills = shotdamage = damage = tokens = 0;
+        bool waitexpired(int gamemillis)
+        {
+            return gamemillis - lastshot >= gunwait;
+        }
 
-        lastdeath = 0;
+        void reset()
+        {
+            if(state!=CS_SPECTATOR) state = editstate = CS_DEAD;
+            maxhealth = 100;
+            rockets.reset();
+            grenades.reset();
+            bombs.reset();
 
-        respawn();
-    }
+            timeplayed = 0;
+            effectiveness = 0;
+            frags = flags = deaths = teamkills = shotdamage = damage = tokens = 0;
 
-    void respawn()
-    {
-        fpsstate::respawn();
-        o = vec(-1e10f, -1e10f, -1e10f);
-        deadflush = 0;
-        lastspawn = -1;
-        lastshot = 0;
-        tokens = 0;
-    }
+            lastdeath = 0;
 
-    void reassign()
-    {
-        respawn();
-        rockets.reset();
-        grenades.reset();
-        bombs.reset();
-    }
+            respawn();
+        }
 
-    void setbackupweapon(int weapon)
-    {
-        fpsstate::backupweapon = weapon;
-    }
+        void respawn()
+        {
+            fpsstate::respawn();
+            o = vec(-1e10f, -1e10f, -1e10f);
+            deadflush = 0;
+            lastspawn = -1;
+            lastshot = 0;
+            tokens = 0;
+        }
+
+        void reassign()
+        {
+            respawn();
+            rockets.reset();
+            grenades.reset();
+            bombs.reset();
+        }
+
+        void setbackupweapon(int weapon)
+        {
+            fpsstate::backupweapon = weapon;
+        }
+
+    };
 
 };
