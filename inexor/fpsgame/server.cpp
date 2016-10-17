@@ -2,6 +2,23 @@
 #include "inexor/util/random.hpp"
 #include "inexor/util/Logging.hpp"
 
+#include "inexor/classes/server_entity.hpp"
+#include "inexor/macros/mastermode_macros.hpp"
+#include "inexor/classes/maprotation.hpp"
+#include "inexor/classes/hitinfo.hpp"
+#include "inexor/templates/projectilestate.hpp"
+#include "inexor/classes/teamrank.hpp"
+#include "inexor/classes/msgfilter.hpp"
+#include "inexor/classes/votecount.hpp"
+#include "inexor/classes/crcinfo.hpp"
+#include "inexor/classes/userkey.hpp"
+#include "inexor/classes/userinfo.hpp"
+#include "inexor/classes/ban.hpp"
+#include "inexor/classes/demofile.hpp"
+#include "inexor/classes/teamkillkick.hpp"
+#include "inexor/classes/teamkillinfo.hpp"
+#include "inexor/classes/worldstate.hpp"
+
 namespace game
 {
     void parseoptions(vector<const char *> &args)
@@ -21,38 +38,25 @@ extern ENetAddress masteraddress;
 
 namespace server
 {
-    #include "inexor/classes/server_entity.hpp"
-
+    extern int gamemillis, nextexceeded;
     static const int DEATHMILLIS = 300;
-
     struct clientinfo;
     int gamemode = 0;
 
     #include "inexor/classes/gameevent.hpp"
-
     #include "inexor/classes/timedevent.hpp"
-
-    #include "inexor/classes/hitinfo.hpp"
-
     #include "inexor/classes/shotevent.hpp"
-
     #include "inexor/classes/explodeevent.hpp"
-
     #include "inexor/classes/suicideevent.hpp"
-
     #include "inexor/classes/pickupevent.hpp"
-
-    #include "inexor/templates/projectilestate.hpp"
-
     #include "inexor/classes/gamestate.hpp"
-
     #include "inexor/classes/savedscore.hpp"
-
-    extern int gamemillis, nextexceeded;
-
     #include "inexor/classes/clientinfo.hpp"
+    #include "inexor/classes/servmode.hpp"
 
-    #include "inexor/classes/ban.hpp"
+    extern void connected(clientinfo *ci);
+    int welcomepacket(packetbuf &p, clientinfo *ci);
+    void sendwelcome(clientinfo *ci);
 
     namespace aiman
     {
@@ -68,12 +72,14 @@ namespace server
         extern void changeteam(clientinfo *ci);
     }
 
-    #include "inexor/macros/mastermode_macros.hpp"
-
+    uint nextauthreq = 0;
+    uint mcrc = 0;
+    bool demonextmatch = false;
+    stream *demotmp = NULL, *demorecord = NULL, *demoplayback = NULL;
+    int nextplayback = 0, demomillis = 0;
     bool notgotitems = true;        // true when map has changed and waiting for clients to send item
     int gamemillis = 0, gamelimit = 0, nextexceeded = 0, gamespeed = 100;
     bool gamepaused = false, teamspersisted = false, shouldstep = true;
-
     string smapname = "";
     int interm = 0;
     enet_uint32 lastsend = 0;
@@ -82,6 +88,17 @@ namespace server
 
     vector<uint> allowedips;
     vector<ban> bannedips;
+    vector<clientinfo *> connects, clients, bots;
+    vector<demofile> demos;
+    vector<teamkillkick> teamkillkicks;
+    vector<teamkillinfo> teamkills;
+    vector<entity> ments;
+    vector<server_entity> sents;
+    vector<savedscore> scores;
+    vector<worldstate> worldstates;
+    vector<ipmask> gbans;
+    static hashset<teaminfo> teaminfos;
+    hashset<userinfo> users;
 
     void addban(uint ip, int expire)
     {
@@ -94,8 +111,6 @@ namespace server
         bannedips.add(b);
     }
 
-    vector<clientinfo *> connects, clients, bots;
-
     void kickclients(uint ip, clientinfo *actor = NULL, int priv = PRIV_NONE)
     {
         loopvrev(clients)
@@ -106,8 +121,6 @@ namespace server
             if(getclientip(c.clientnum) == ip) disconnect_client(c.clientnum, DISC_KICK);
         }
     }
- 
-    #include "inexor/classes/maprotation.hpp"
 
     VAR(lockmaprotation, 0, 0, 2);
 
@@ -249,14 +262,6 @@ namespace server
     COMMAND(maprotationreset, "");
     COMMANDN(maprotation, addmaprotations, "ss2V");
 
-    #include "inexor/classes/demofile.hpp"
-
-    vector<demofile> demos;
-
-    bool demonextmatch = false;
-    stream *demotmp = NULL, *demorecord = NULL, *demoplayback = NULL;
-    int nextplayback = 0, demomillis = 0;
-
     VAR(maxdemos, 0, 5, 25);
     VAR(maxdemosize, 0, 16, 31);
     VAR(restrictdemos, 0, 1, 1);
@@ -278,11 +283,7 @@ namespace server
 	});
     SVAR(servermotd, "");
     VAR(spectatemodifiedmap, 0, 1, 1);
-
-    #include "inexor/classes/teamkillkick.hpp"
-
-    vector<teamkillkick> teamkillkicks;
-
+    
     void teamkillkickreset()
     {
         teamkillkicks.setsize(0);
@@ -302,9 +303,6 @@ namespace server
     COMMAND(teamkillkickreset, "");
     COMMANDN(teamkillkick, addteamkillkick, "sii");
 
-    #include "inexor/classes/teamkillinfo.hpp"
-
-    vector<teamkillinfo> teamkills;
     bool shouldcheckteamkills = false;
 
     void addteamkill(clientinfo *actor, clientinfo *victim, int n)
@@ -340,8 +338,15 @@ namespace server
         shouldcheckteamkills = false;
     }
 
-    void *newclientinfo() { return new clientinfo; }
-    void deleteclientinfo(void *ci) { delete (clientinfo *)ci; }
+    void *newclientinfo()
+    {
+        return new clientinfo;
+    }
+    
+    void deleteclientinfo(void *ci)
+    {
+        delete (clientinfo *)ci;
+    }
 
     clientinfo *getinfo(int n)
     {
@@ -349,12 +354,7 @@ namespace server
         n -= MAXCLIENTS;
         return bots.inrange(n) ? bots[n] : NULL;
     }
-
-    uint mcrc = 0;
-    vector<entity> ments;
-    vector<server_entity> sents;
-    vector<savedscore> scores;
-
+    
     int msgsizelookup(int msg)
     {
         static int sizetable[NUMMSG] = { -1 };
@@ -388,7 +388,11 @@ namespace server
         }
     }
 
-    void sendservmsg(const char *s) { sendf(-1, 1, "ris", N_SERVMSG, s); }
+    void sendservmsg(const char *s)
+    {
+        sendf(-1, 1, "ris", N_SERVMSG, s);
+    }
+
     void sendservmsgf(const char *fmt, ...)
     {
          defvformatstring(s, fmt, fmt);
@@ -450,8 +454,6 @@ namespace server
         return cname[cidx];
     }
 
-    #include "inexor/classes/servmode.hpp"
-
     #define SERVMODE 1
     #include "inexor/fpsgame/capture.hpp"
     #include "inexor/fpsgame/ctf.hpp"
@@ -464,7 +466,6 @@ namespace server
     collectservmode collectmode;
     bombservmode bombmode;
     hideandseekservmode hideandseekmode;
-
     servmode *smode = NULL;
 
     bool canspawnitem(int type) {
@@ -524,8 +525,6 @@ namespace server
         ci->state.pickup(sents[i].type);
         return true;
     }
-
-    static hashset<teaminfo> teaminfos;
 
     void clearteaminfo()
     {
@@ -606,8 +605,6 @@ namespace server
             }
         }
     }
-
-    #include "inexor/classes/teamrank.hpp"
 
     const char *chooseworstteam(const char *suggest = NULL, clientinfo *exclude = NULL)
     {
@@ -693,9 +690,6 @@ namespace server
     {
         writedemo(chan, data, len);
     }
-
-    int welcomepacket(packetbuf &p, clientinfo *ci);
-    void sendwelcome(clientinfo *ci);
 
     void setupdemorecord()
     {
@@ -886,7 +880,10 @@ namespace server
         pausegame(paused);
     }
 
-    bool ispaused() { return gamepaused; }
+    bool ispaused()
+    {
+        return gamepaused;
+    }
 
     void changegamespeed(int val, clientinfo *ci = NULL)
     {
@@ -901,7 +898,10 @@ namespace server
         changegamespeed(speed);
     }
 
-    int scaletime(int t) { return t*gamespeed; }
+    int scaletime(int t)
+    {
+        return t*gamespeed;
+    }
 
     void persistteams(bool val)
     {
@@ -924,12 +924,6 @@ namespace server
     }
     
     SVAR(serverauth, "");
-
-    #include "inexor/classes/userkey.hpp"
-
-    #include "inexor/classes/userinfo.hpp"
-
-    hashset<userinfo> users;
 
     void adduser(char *name, char *desc, char *pubkey, char *priv)
     {
@@ -974,8 +968,6 @@ namespace server
         ci->privilege = PRIV_NONE;
         if(ci->state.state==CS_SPECTATOR && !ci->local) aiman::removeai(ci);
     }
-
-    extern void connected(clientinfo *ci);
 
     bool setmaster(clientinfo *ci, bool val, const char *pass = "", const char *authname = NULL, const char *authdesc = NULL, int authpriv = PRIV_MASTER, bool force = false, bool trial = false)
     {
@@ -1113,8 +1105,6 @@ namespace server
         if(sc) sc->save(ci->state);
     }
 
-    #include "inexor/classes/msgfilter.hpp"
-
     int checktype(int type, clientinfo *ci)
     {
         if(ci)
@@ -1147,9 +1137,6 @@ namespace server
         return type;
     }
 
-    #include "inexor/classes/worldstate.hpp"
-
-    vector<worldstate> worldstates;
     bool reliablemessages = false;
 
     void cleanworldstate(ENetPacket *packet)
@@ -1650,8 +1637,6 @@ namespace server
         changemap(rot.map, rot.findmode(gamemode));
     }
     
-    #include "inexor/classes/votecount.hpp"
-
     void checkvotes(bool force = false)
     {
         vector<votecount> votes;
@@ -1758,12 +1743,10 @@ namespace server
         if(smode) smode->intermission();
     }
 
-    ///
     // Checks if the game has ended because only one player is still alive.
     // It does this by checking if less than 2 players have their state set to alive.
     // This means, the game will also end if someone is gagging
     // If only one is still alive this method forces intermission.
-    ///
     void checklms()
     {
         if(m_teammode)
@@ -2114,8 +2097,6 @@ namespace server
         sendf(-1, 1, "ri3", N_SPECTATOR, ci->clientnum, 1);
     }
 
-    #include "inexor/classes/crcinfo.hpp"
-
     VAR(modifiedmapspectator, 0, 1, 2);
 
     void checkmaps(int req = -1)
@@ -2262,10 +2243,11 @@ namespace server
         else connects.removeobj(ci);
     }
 
-    int reserveclients() { return 3; }
-
-    vector<ipmask> gbans;
-
+    int reserveclients()
+    {
+        return 3;
+    }
+    
     void cleargbans()
     {
         gbans.shrink(0);
@@ -2320,8 +2302,7 @@ namespace server
         loopv(clients) if(clients[i]->authreq == id) return clients[i];
         return NULL;
     }
-
-
+    
     void authfailed(clientinfo *ci)
     {
         if(!ci) return;
@@ -2355,8 +2336,6 @@ namespace server
         if(!ci) return;
         sendf(ci->clientnum, 1, "risis", N_AUTHCHAL, desc, id, val);
     }
-
-    uint nextauthreq = 0;
 
     bool tryauth(clientinfo *ci, const char *user, const char *desc)
     {
@@ -3361,12 +3340,35 @@ namespace server
         }
     }
 
-    int laninfoport() { return INEXOR_LANINFO_PORT; }
-    int serverinfoport(int servport) { return servport < 0 ? INEXOR_SERVINFO_PORT : servport+1; }
-    int serverport(int infoport) { return infoport < 0 ? INEXOR_SERVER_PORT : infoport-1; }
-    const char *defaultmaster() { return "master.inexor.org"; }
-    int masterport() { return INEXOR_MASTER_PORT; }
-    int numchannels() { return 3; }
+    int laninfoport()
+    {
+        return INEXOR_LANINFO_PORT;
+    }
+
+    int serverinfoport(int servport)
+    {
+        return servport < 0 ? INEXOR_SERVINFO_PORT : servport+1;
+    }
+    
+    int serverport(int infoport)
+    {
+        return infoport < 0 ? INEXOR_SERVER_PORT : infoport-1;
+    }
+    
+    const char *defaultmaster()
+    {
+        return "master.inexor.org";
+    }
+    
+    int masterport()
+    {
+        return INEXOR_MASTER_PORT;
+    }
+    
+    int numchannels()
+    {
+        return 3;
+    }
 
     #include "inexor/fpsgame/extinfo.hpp"
 
