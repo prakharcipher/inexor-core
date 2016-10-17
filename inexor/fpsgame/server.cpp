@@ -525,12 +525,7 @@ namespace server
     COMMAND(maprotationreset, "");
     COMMANDN(maprotation, addmaprotations, "ss2V");
 
-    struct demofile
-    {
-        string info;
-        uchar *data;
-        int len;
-    };
+    #include "inexor/classes/demofile.hpp"
 
     vector<demofile> demos;
 
