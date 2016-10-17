@@ -40,12 +40,7 @@ namespace server
 
     #include "inexor/classes/suicideevent.hpp"
 
-    struct pickupevent : gameevent
-    {
-        int ent;
-
-        void process(clientinfo *ci);
-    };
+    #include "inexor/classes/pickupevent.hpp"
 
     #include "inexor/templates/projectilestate.hpp"
 
