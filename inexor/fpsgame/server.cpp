@@ -578,11 +578,8 @@ namespace server
     COMMAND(teamkillkickreset, "");
     COMMANDN(teamkillkick, addteamkillkick, "sii");
 
-    struct teamkillinfo
-    {
-        uint ip;
-        int teamkills;
-    };
+    #include "inexor/classes/teamkillinfo.hpp"
+
     vector<teamkillinfo> teamkills;
     bool shouldcheckteamkills = false;
 
