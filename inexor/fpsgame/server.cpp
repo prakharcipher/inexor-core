@@ -555,20 +555,8 @@ namespace server
     SVAR(servermotd, "");
     VAR(spectatemodifiedmap, 0, 1, 1);
 
-    struct teamkillkick
-    {
-        int modes, limit, ban;
+    #include "inexor/classes/teamkillkick.hpp"
 
-        bool match(int mode) const
-        {
-            return (modes&(1<<(mode-STARTGAMEMODE)))!=0;
-        }
-
-        bool includes(const teamkillkick &tk) const
-        {
-            return tk.modes != modes && (tk.modes & modes) == tk.modes;
-        }
-    };
     vector<teamkillkick> teamkillkicks;
 
     void teamkillkickreset()
