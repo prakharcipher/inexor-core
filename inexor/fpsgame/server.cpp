@@ -31,6 +31,7 @@
 #include "inexor/classes/clientinfo.hpp"
 #include "inexor/classes/servmode.hpp"
 
+#include "inexor/server/demos.hpp"
 
 namespace game
 {
@@ -76,7 +77,6 @@ namespace server
 
     int interm = 0;
     int nextplayback = 0;
-    int demomillis = 0;
     int gamemillis = 0;
     int gamelimit = 0;
     int nextexceeded = 0;
@@ -84,7 +84,6 @@ namespace server
     int mastermode = MM_OPEN;
     int mastermask = MM_PRIVSERV;
 
-    bool demonextmatch = false;
     bool notgotitems = true;
     bool gamepaused = false;
     bool teamspersisted = false;
@@ -93,9 +92,6 @@ namespace server
     uint nextauthreq = 0;
     uint mcrc = 0;
 
-    stream *demotmp = NULL;
-    stream *demorecord = NULL;
-    stream *demoplayback = NULL;
     stream *mapdata = NULL;
 
     string smapname = "";
@@ -104,7 +100,6 @@ namespace server
     vector<uint> allowedips;
     vector<ban> bannedips;
     vector<clientinfo *> connects, clients, bots;
-    vector<demofile> demos;
     vector<teamkillkick> teamkillkicks;
     vector<teamkillinfo> teamkills;
     vector<entity> ments;
@@ -274,9 +269,6 @@ namespace server
     }
     
     VAR(lockmaprotation, 0, 0, 2);
-    VAR(maxdemos, 0, 5, 25);
-    VAR(maxdemosize, 0, 16, 31);
-    VAR(restrictdemos, 0, 1, 1);
     VAR(restrictpausegame, 0, 0, 1);
     VAR(restrictgamespeed, 0, 1, 1);
     VAR(spectatemodifiedmap, 0, 1, 1);
@@ -655,228 +647,6 @@ namespace server
             else if(ts.rank < worst->rank || (ts.rank == worst->rank && ts.clients < worst->clients)) worst = &ts;
         }
         return worst->name;
-    }
-
-    void prunedemos(int extra = 0)
-    {
-        int n = clamp(demos.length() + extra - maxdemos, 0, demos.length());
-        if(n <= 0) return;
-        loopi(n) delete[] demos[i].data;
-        demos.remove(0, n);
-    }
- 
-    void adddemo()
-    {
-        if(!demotmp) return;
-        int len = (int)min(demotmp->size(), stream::offset((maxdemosize<<20) + 0x10000));
-        demofile &d = demos.add();
-        time_t t = time(NULL);
-        char *timestr = ctime(&t), *trim = timestr + strlen(timestr);
-        while(trim>timestr && iscubespace(*--trim)) *trim = '\0';
-        formatstring(d.info, "%s: %s, %s, %.2f%s", timestr, modename(gamemode), smapname, len > 1024*1024 ? len/(1024*1024.f) : len/1024.0f, len > 1024*1024 ? "MB" : "kB");
-        sendservmsgf("demo \"%s\" recorded", d.info);
-        d.data = new uchar[len];
-        d.len = len;
-        demotmp->seek(0, SEEK_SET);
-        demotmp->read(d.data, len);
-        DELETEP(demotmp);
-    }
-        
-    void enddemorecord()
-    {
-        if(!demorecord) return;
-
-        DELETEP(demorecord);
-
-        if(!demotmp) return;
-        if(!maxdemos || !maxdemosize) { DELETEP(demotmp); return; }
-
-        prunedemos(1);
-        adddemo();
-    }
-
-    void writedemo(int chan, void *data, int len)
-    {
-        if(!demorecord) return;
-        int stamp[3] = { gamemillis, chan, len };
-        lilswap(stamp, 3);
-        demorecord->write(stamp, sizeof(stamp));
-        demorecord->write(data, len);
-        if(demorecord->rawtell() >= (maxdemosize<<20)) enddemorecord();
-    }
-
-    void recordpacket(int chan, void *data, int len)
-    {
-        writedemo(chan, data, len);
-    }
-
-    void setupdemorecord()
-    {
-        if(!m_mp(gamemode) || m_edit) return;
-
-        demotmp = opentempfile("demorecord", "w+b");
-        if(!demotmp) return;
-
-        stream *f = opengzfile(NULL, "wb", demotmp);
-        if(!f) { DELETEP(demotmp); return; }
-
-        sendservmsg("recording demo");
-
-        demorecord = f;
-
-        demoheader hdr;
-        memcpy(hdr.magic, DEMO_MAGIC, sizeof(hdr.magic));
-        hdr.version = DEMO_VERSION;
-        hdr.protocol = PROTOCOL_VERSION;
-        lilswap(&hdr.version, 2);
-        demorecord->write(&hdr, sizeof(demoheader));
-
-        packetbuf p(MAXTRANS, ENET_PACKET_FLAG_RELIABLE);
-        welcomepacket(p, NULL);
-        writedemo(1, p.buf, p.len);
-    }
-
-    void listdemos(int cn)
-    {
-        packetbuf p(MAXTRANS, ENET_PACKET_FLAG_RELIABLE);
-        putint(p, N_SENDDEMOLIST);
-        putint(p, demos.length());
-        loopv(demos) sendstring(demos[i].info, p);
-        sendpacket(cn, 1, p.finalize());
-    }
-
-    void cleardemos(int n)
-    {
-        if(!n)
-        {
-            loopv(demos) delete[] demos[i].data;
-            demos.shrink(0);
-            sendservmsg("cleared all demos");
-        }
-        else if(demos.inrange(n-1))
-        {
-            delete[] demos[n-1].data;
-            demos.remove(n-1);
-            sendservmsgf("cleared demo %d", n);
-        }
-    }
-
-    static void freegetmap(ENetPacket *packet)
-    {
-        loopv(clients)
-        {
-            clientinfo *ci = clients[i];
-            if(ci->getmap == packet) ci->getmap = NULL;
-        }
-    }
-
-    static void freegetdemo(ENetPacket *packet)
-    {
-        loopv(clients)
-        {
-            clientinfo *ci = clients[i];
-            if(ci->getdemo == packet) ci->getdemo = NULL;
-        }
-    }
-
-    void senddemo(clientinfo *ci, int num)
-    {
-        if(ci->getdemo) return;
-        if(!num) num = demos.length();
-        if(!demos.inrange(num-1)) return;
-        demofile &d = demos[num-1];
-        if((ci->getdemo = sendf(ci->clientnum, 2, "rim", N_SENDDEMO, d.len, d.data)))
-            ci->getdemo->freeCallback = freegetdemo;
-    }
-
-    void enddemoplayback()
-    {
-        if(!demoplayback) return;
-        DELETEP(demoplayback);
-
-        loopv(clients) sendf(clients[i]->clientnum, 1, "ri3", N_DEMOPLAYBACK, 0, clients[i]->clientnum);
-
-        sendservmsg("demo playback finished");
-
-        loopv(clients) sendwelcome(clients[i]);
-    }
-
-    void setupdemoplayback()
-    {
-        if(demoplayback) return;
-        demoheader hdr;
-        string msg;
-        msg[0] = '\0';
-        defformatstring(file, "%s.dmo", smapname);
-        demoplayback = opengzfile(file, "rb");
-        if(!demoplayback) formatstring(msg, "could not read demo \"%s\"", file);
-        else if(demoplayback->read(&hdr, sizeof(demoheader))!=sizeof(demoheader) || memcmp(hdr.magic, DEMO_MAGIC, sizeof(hdr.magic)))
-            formatstring(msg, "\"%s\" is not a demo file", file);
-        else
-        {
-            lilswap(&hdr.version, 2);
-            if(hdr.version!=DEMO_VERSION) formatstring(msg, "demo \"%s\" requires an %s version of Inexor", file, hdr.version<DEMO_VERSION ? "older" : "newer");
-            else if(hdr.protocol!=PROTOCOL_VERSION) formatstring(msg, "demo \"%s\" requires an %s version of Inexor", file, hdr.protocol<PROTOCOL_VERSION ? "older" : "newer");
-        }
-        if(msg[0])
-        {
-            DELETEP(demoplayback);
-            sendservmsg(msg);
-            return;
-        }
-
-        sendservmsgf("playing demo \"%s\"", file);
-
-        demomillis = 0;
-        sendf(-1, 1, "ri3", N_DEMOPLAYBACK, 1, -1);
-
-        if(demoplayback->read(&nextplayback, sizeof(nextplayback))!=sizeof(nextplayback))
-        {
-            enddemoplayback();
-            return;
-        }
-        lilswap(&nextplayback, 1);
-    }
-
-    void readdemo()
-    {
-        if(!demoplayback) return;
-        demomillis += curtime;
-        while(demomillis>=nextplayback)
-        {
-            int chan, len;
-            if(demoplayback->read(&chan, sizeof(chan))!=sizeof(chan) ||
-               demoplayback->read(&len, sizeof(len))!=sizeof(len))
-            {
-                enddemoplayback();
-                return;
-            }
-            lilswap(&chan, 1);
-            lilswap(&len, 1);
-            ENetPacket *packet = enet_packet_create(NULL, len+1, 0);
-            if(!packet || demoplayback->read(packet->data+1, len)!=size_t(len))
-            {
-                if(packet) enet_packet_destroy(packet);
-                enddemoplayback();
-                return;
-            }
-            packet->data[0] = N_DEMOPACKET;
-            sendpacket(-1, chan, packet);
-            if(!packet->referenceCount) enet_packet_destroy(packet);
-            if(!demoplayback) break;
-            if(demoplayback->read(&nextplayback, sizeof(nextplayback))!=sizeof(nextplayback))
-            {
-                enddemoplayback();
-                return;
-            }
-            lilswap(&nextplayback, 1);
-        }
-    }
-
-    void stopdemo()
-    {
-        if(m_demo) enddemoplayback();
-        else enddemorecord();
     }
 
     void pausegame(bool val, clientinfo *ci = NULL)
