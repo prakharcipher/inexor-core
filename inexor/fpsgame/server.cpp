@@ -34,14 +34,7 @@ namespace server
 
     #include "inexor/classes/hitinfo.hpp"
 
-    struct shotevent : timedevent
-    {
-        int id, gun;
-        vec from, to;
-        vector<hitinfo> hits;
-
-        void process(clientinfo *ci);
-    };
+    #include "inexor/classes/shotevent.hpp"
 
     struct explodeevent : timedevent
     {
