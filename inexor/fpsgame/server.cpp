@@ -72,19 +72,32 @@ namespace server
         extern void changeteam(clientinfo *ci);
     }
 
+    int interm = 0;
+    int nextplayback = 0;
+    int demomillis = 0;
+    int gamemillis = 0;
+    int gamelimit = 0;
+    int nextexceeded = 0;
+    int gamespeed = 100;
+    int mastermode = MM_OPEN;
+    int mastermask = MM_PRIVSERV;
+
+    bool demonextmatch = false;
+    bool notgotitems = true;
+    bool gamepaused = false;
+    bool teamspersisted = false;
+    bool shouldstep = true;
+
     uint nextauthreq = 0;
     uint mcrc = 0;
-    bool demonextmatch = false;
-    stream *demotmp = NULL, *demorecord = NULL, *demoplayback = NULL;
-    int nextplayback = 0, demomillis = 0;
-    bool notgotitems = true;        // true when map has changed and waiting for clients to send item
-    int gamemillis = 0, gamelimit = 0, nextexceeded = 0, gamespeed = 100;
-    bool gamepaused = false, teamspersisted = false, shouldstep = true;
-    string smapname = "";
-    int interm = 0;
-    enet_uint32 lastsend = 0;
-    int mastermode = MM_OPEN, mastermask = MM_PRIVSERV;
+
+    stream *demotmp = NULL;
+    stream *demorecord = NULL;
+    stream *demoplayback = NULL;
     stream *mapdata = NULL;
+
+    string smapname = "";
+    enet_uint32 lastsend = 0;
 
     vector<uint> allowedips;
     vector<ban> bannedips;
@@ -97,6 +110,7 @@ namespace server
     vector<savedscore> scores;
     vector<worldstate> worldstates;
     vector<ipmask> gbans;
+
     static hashset<teaminfo> teaminfos;
     hashset<userinfo> users;
 
@@ -121,9 +135,7 @@ namespace server
             if(getclientip(c.clientnum) == ip) disconnect_client(c.clientnum, DISC_KICK);
         }
     }
-
-    VAR(lockmaprotation, 0, 0, 2);
-
+    
     void maprotationreset()
     {
         maprotations.setsize(0);
@@ -259,20 +271,22 @@ namespace server
         }
     }
     
-    COMMAND(maprotationreset, "");
-    COMMANDN(maprotation, addmaprotations, "ss2V");
-
+    VAR(lockmaprotation, 0, 0, 2);
     VAR(maxdemos, 0, 5, 25);
     VAR(maxdemosize, 0, 16, 31);
     VAR(restrictdemos, 0, 1, 1);
-
     VAR(restrictpausegame, 0, 0, 1);
     VAR(restrictgamespeed, 0, 1, 1);
+    VAR(spectatemodifiedmap, 0, 1, 1);
     VAR(restrictpersistteams, 0, 0, 1);
+    VAR(modifiedmapspectator, 0, 1, 2);
 
     SVAR(serverdesc, "");
     SVAR(serverpass, "");
     SVAR(adminpass, "");
+    SVAR(servermotd, "");
+    SVAR(serverauth, "");
+
     VARF(publicserver, 0, 0, 2, {
 		switch(publicserver)
 		{
@@ -281,8 +295,6 @@ namespace server
 			case 2: mastermask = MM_COOPSERV; break;
 		}
 	});
-    SVAR(servermotd, "");
-    VAR(spectatemodifiedmap, 0, 1, 1);
     
     void teamkillkickreset()
     {
@@ -299,9 +311,6 @@ namespace server
         kick.ban = *ban > 0 ? *ban*60000 : (*ban < 0 ? 0 : 30*60000); 
         modes.deletearrays();
     }
-
-    COMMAND(teamkillkickreset, "");
-    COMMANDN(teamkillkick, addteamkillkick, "sii");
 
     bool shouldcheckteamkills = false;
 
@@ -531,7 +540,15 @@ namespace server
         teaminfos.clear();
     }
 
-    bool teamhasplayers(const char *team) { loopv(clients) if(!strcmp(clients[i]->team, team)) return true; return false; }
+    bool teamhasplayers(const char *team)
+    {
+        loopv(clients)
+        {
+            if(!strcmp(clients[i]->team, team))
+                return true;
+        }
+        return false;
+    }
 
     bool pruneteaminfo()
     {
@@ -922,8 +939,6 @@ namespace server
     {
         persistteams(persist);
     }
-    
-    SVAR(serverauth, "");
 
     void adduser(char *name, char *desc, char *pubkey, char *priv)
     {
@@ -940,13 +955,11 @@ namespace server
             case 'n': case 'N': u.privilege = PRIV_NONE; break;
         }
     }
-    COMMAND(adduser, "ssss");
 
     void clearusers()
     {
         users.clear();
     }
-    COMMAND(clearusers, "");
 
     void hashpassword(int cn, int sessionid, const char *pwd, char *result, int maxlen)
     {
@@ -1616,9 +1629,6 @@ namespace server
             }
         }
     }
-#ifdef STANDALONE
-    ICOMMAND(mapmode, "si", (char *name, int *mode), changemap(name, *mode));
-#endif
 
     void rotatemap(bool next)
     {
@@ -2096,8 +2106,6 @@ namespace server
         if(!ci->local && (!ci->privilege || ci->warned)) aiman::removeai(ci);
         sendf(-1, 1, "ri3", N_SPECTATOR, ci->clientnum, 1);
     }
-
-    VAR(modifiedmapspectator, 0, 1, 2);
 
     void checkmaps(int req = -1)
     {
@@ -3403,5 +3411,19 @@ namespace server
     }
 
     #include "inexor/fpsgame/aiman.hpp"
+
+    COMMAND(maprotationreset, "");
+    COMMAND(teamkillkickreset, "");
+    COMMAND(clearusers, "");
+    COMMAND(adduser, "ssss");
+
+    COMMANDN(maprotation, addmaprotations, "ss2V");
+    COMMANDN(teamkillkick, addteamkillkick, "sii");
+
+    #ifdef STANDALONE
+        ICOMMAND(mapmode, "si", (char *name, int *mode), changemap(name, *mode));
+    #endif
+
+
 }
 
