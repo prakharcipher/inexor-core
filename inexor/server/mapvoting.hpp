@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/enumerations/gamemode_bitmask.hpp"
+
 namespace server {
 
     VAR(lockmaprotation, 0, 0, 2);
