@@ -7,6 +7,8 @@
 #define loopj(m) loop(j,m)
 #define loopk(m) loop(k,m)
 #define loopl(m) loop(l,m)
+
+/// reverted loops
 #define looprev(v,m) for(int v = int(m); --v >= 0;)
 #define loopirev(m) looprev(i,m)
 #define loopjrev(m) looprev(j,m)

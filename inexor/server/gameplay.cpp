@@ -1,1 +1,5 @@
-#include "inexor/server/server_gameplay.hpp"
+#include "inexor/server/gameplay.hpp"
+
+namespace server {
+
+};

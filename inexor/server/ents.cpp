@@ -1,1 +1,5 @@
-#include "inexor/server/entities.hpp"
+#include "inexor/server/ents.hpp"
+
+namespace server {
+
+};
