@@ -1,7 +1,10 @@
+/// THESE VECTOR TEMPLATES ARE DEPRECATED!
+/// use std::vector instead!
+
 #pragma once
 
-/// This template class is deprecated!
-/// Please use std::vector instead!
+#include "inexor/templates/databuf.hpp"
+#include "inexor/deprecated/assert.hpp"
 
 /// 
 template <class T, int MINSIZE = 8> struct vector

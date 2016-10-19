@@ -1,8 +1,14 @@
 #pragma once
 
+#include "inexor/fpsgame/game.hpp"
+#include "inexor/classes/clientinfo.hpp"
+#include "inexor/classes/demofile.hpp"
+
 namespace server {
     
+    /// extern declarations
     extern int nextplayback;
+    extern int gamemode;
     extern vector<clientinfo *> connects, clients, bots;
     extern int welcomepacket(packetbuf &p, clientinfo *ci);
     extern string smapname;

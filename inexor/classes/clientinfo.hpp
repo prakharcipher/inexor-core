@@ -1,9 +1,23 @@
 #pragma once
 
+#include "inexor/enumerations/admin_levels.hpp"
+
+#include "inexor/classes/events/gameevent.hpp"
+#include "inexor/classes/gamestate.hpp"
+
+#include "inexor/deprecated/string.hpp"
+#include "inexor/deprecated/vector.hpp"
+#include "inexor/deprecated/memfree.hpp"
+
+#include <enet/enet.h>
+
+
 namespace server {
 
     extern int nextexceeded;
     extern int gamemillis;
+
+    extern void freechallenge(void *answer);
 
     /// 
     struct clientinfo

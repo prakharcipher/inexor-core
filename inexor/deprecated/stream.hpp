@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL_rwops.h>
 
 // workaround for some C platforms that have these two functions as macros - not used anywhere
 #ifdef getchar
@@ -9,6 +10,7 @@
   #undef putchar
 #endif
 
+/// 
 struct stream
 {
 #ifdef WIN32

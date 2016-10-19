@@ -1,5 +1,8 @@
 #pragma once
 
+#include "inexor/macros/loop_macros.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
+
 /// 
 struct maprotation
 {

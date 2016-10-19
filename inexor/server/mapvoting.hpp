@@ -1,6 +1,20 @@
 #pragma once
 
+#include "inexor/deprecated/string.hpp"
+#include "inexor/deprecated/vector.hpp"
+
 #include "inexor/enumerations/gamemode_bitmask.hpp"
+
+#include "inexor/classes/maprotation.hpp"
+
+#include "inexor/macros/loop_macros.hpp"
+#include "inexor/macros/gamemode_macros.hpp"
+
+#include "inexor/fpsgame/game.hpp"
+
+#include <algorithm>
+using std::min;
+using std::max;
 
 namespace server {
 

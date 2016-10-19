@@ -1,4 +1,13 @@
+/// THESE STRING CLASSES ARE DEPRECATED!
+/// use std::string instead!
+
 #pragma once
+
+#include <cstdarg>
+#include <cstring>
+#include <algorithm>
+using std::min;
+using std::max;
 
 #ifdef __GNUC__
   #define PRINTFARGS(fmt, args) __attribute__((format(printf, fmt, args)))
@@ -6,9 +15,7 @@
   #define PRINTFARGS(fmt, args)
 #endif
 
-/// maximal sauer-"string" length.
 #define MAXSTRLEN 260
-/// sauer "strings" (char arrays of fixed size).
 typedef char string[MAXSTRLEN];
 
 /// Internal: format string using variable parameter lists (va_list)

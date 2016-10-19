@@ -1,23 +1,17 @@
-/// @file mathmatics for vectors, matrices, quaterions and more
-
-/// The cube engine uses 3 different linear coordinate systems
-/// which are oriented around each of the axis dimensions.
-///
-/// So any point within the game can be defined by four coordinates: (d, x, y, z)
-///
-/// d is the reference axis dimension
-/// x is the coordinate of the ROW dimension
-/// y is the coordinate of the COL dimension
-/// z is the coordinate of the reference dimension (DEPTH)
-///
-/// typically, if d is not used, then it is implicitly the Z dimension.
-/// ie: d=z => x=x, y=y, z=z
-
 #pragma once
+
+#include "inexor/deprecated/type_definitions.hpp"
+#include "inexor/deprecated/byteswap.hpp"
+#include "inexor/deprecated/math_constants.hpp"
+
+#include <boost/algorithm/clamp.hpp>
+using boost::algorithm::clamp;
+
+#include <algorithm>
+using std::swap;
 
 #include <iostream>
 
-/// declaration of 2- and 4-dimensional vectors
 struct vec;
 struct vec4;
 struct ivec;

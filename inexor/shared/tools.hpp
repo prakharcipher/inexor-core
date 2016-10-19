@@ -10,13 +10,7 @@
 #include "inexor/util.hpp"
 
 #include "inexor/deprecated/type_definitions.hpp"
-
-
-#ifdef _DEBUG //TODO remove
-  #define ASSERT(c) assert(c)
-#else
-  #define ASSERT(c) if(c) {}
-#endif
+#include "inexor/deprecated/assert.hpp"
 
 #if defined(__GNUC__) || (defined(_MSC_VER) && _MSC_VER >= 1400)
   #define RESTRICT __restrict

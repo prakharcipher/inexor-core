@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/templates/projectilestate.hpp"
+
 namespace server {
 
     extern const int DEATHMILLIS;

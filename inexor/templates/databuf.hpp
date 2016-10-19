@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/deprecated/type_definitions.hpp"
+
 /// template implementation of buffers (networking e.g.).
 /// work like streams: you put stuff at the end, you get stuff from the end
 template <class T>

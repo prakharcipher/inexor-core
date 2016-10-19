@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/classes/gamemodeinfo.hpp"
+
 /// the first 3 game modes are not used in multiplayer
 #define STARTGAMEMODE (-3)
 
