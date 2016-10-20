@@ -1,6 +1,8 @@
 #pragma once
 
+#include "inexor/classes/fpsstate.hpp"
 #include "inexor/templates/projectilestate.hpp"
+#include "inexor/shared/geom.hpp"
 
 namespace server {
 

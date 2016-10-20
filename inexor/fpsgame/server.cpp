@@ -2,11 +2,13 @@
 #include "inexor/util/random.hpp"
 #include "inexor/util/Logging.hpp"
 
-#include "inexor/classes/server_entity.hpp"
+#include "inexor/templates/projectilestate.hpp"
+
 #include "inexor/macros/mastermode_macros.hpp"
+
+#include "inexor/classes/server_entity.hpp"
 #include "inexor/classes/maprotation.hpp"
 #include "inexor/classes/hitinfo.hpp"
-#include "inexor/templates/projectilestate.hpp"
 #include "inexor/classes/teamrank.hpp"
 #include "inexor/classes/msgfilter.hpp"
 #include "inexor/classes/votecount.hpp"
@@ -18,6 +20,10 @@
 #include "inexor/classes/teamkillkick.hpp"
 #include "inexor/classes/teamkillinfo.hpp"
 #include "inexor/classes/worldstate.hpp"
+#include "inexor/classes/gamestate.hpp"
+#include "inexor/classes/savedscore.hpp"
+#include "inexor/classes/clientinfo.hpp"
+#include "inexor/classes/servmode.hpp"
 
 #include "inexor/classes/events/gameevent.hpp"
 #include "inexor/classes/events/timedevent.hpp"
@@ -25,11 +31,6 @@
 #include "inexor/classes/events/explodeevent.hpp"
 #include "inexor/classes/events/suicideevent.hpp"
 #include "inexor/classes/events/pickupevent.hpp"
-
-#include "inexor/classes/gamestate.hpp"
-#include "inexor/classes/savedscore.hpp"
-#include "inexor/classes/clientinfo.hpp"
-#include "inexor/classes/servmode.hpp"
 
 #include "inexor/server/demos.hpp"
 #include "inexor/server/mapvoting.hpp"
@@ -59,8 +60,6 @@ namespace server
     int gamemode = 0;
 
     extern void connected(clientinfo *ci);
-    int welcomepacket(packetbuf &p, clientinfo *ci);
-    void sendwelcome(clientinfo *ci);
 
     namespace aiman
     {
@@ -134,6 +133,9 @@ namespace server
         }
     }
     
+    VAR(maxdemos, 0, 5, 25);
+    VAR(maxdemosize, 0, 16, 31);
+    VAR(restrictdemos, 0, 1, 1);
     VAR(restrictpausegame, 0, 0, 1);
     VAR(restrictgamespeed, 0, 1, 1);
     VAR(spectatemodifiedmap, 0, 1, 1);

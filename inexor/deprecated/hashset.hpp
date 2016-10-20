@@ -1,6 +1,7 @@
 #pragma once
 
 #include "inexor/deprecated/vector.hpp"
+#include <SDL_opengl.h>
 
 // simple bernstein hashing algorithm
 // invented by Dan Bernstein

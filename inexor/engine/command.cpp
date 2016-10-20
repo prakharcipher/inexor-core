@@ -139,11 +139,7 @@ static inline void cleancode(ident &id)
     }
 }
 
-struct nullval : tagval
-{
-    nullval() { setnull(); }
-} nullval;
-tagval noret = nullval, *commandret = &noret;
+
 
 void clear_command()
 {

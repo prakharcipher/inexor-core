@@ -2,9 +2,15 @@
 
 #include <new>
 #include <cstddef>
+#include <zlib.h>
+
 #include <algorithm>
+using std::swap;
+using std::min;
+using std::max;
 
 #include <boost/algorithm/clamp.hpp>
+using boost::algorithm::clamp;
 
 #include "inexor/util/random.hpp"
 #include "inexor/util.hpp"
@@ -23,12 +29,6 @@
 #else
   #define UNUSED
 #endif
-
-using std::swap;
-using std::min;
-using std::max;
-
-using boost::algorithm::clamp;
 
 #ifdef __GNUC__
 #define bitscan(mask) (__builtin_ffs(mask)-1)

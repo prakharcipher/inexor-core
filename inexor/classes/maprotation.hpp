@@ -2,6 +2,8 @@
 
 #include "inexor/macros/loop_macros.hpp"
 #include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/deprecated/string.hpp"
+#include "inexor/deprecated/vector.hpp"
 
 /// 
 struct maprotation
@@ -30,6 +32,6 @@ struct maprotation
     }
 };
 
-int maprotation::exclude = 0;
-vector<maprotation> maprotations;
-int curmaprotation = 0;
+extern int exclude;
+extern int curmaprotation;
+extern vector<maprotation> maprotations;

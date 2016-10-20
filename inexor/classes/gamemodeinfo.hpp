@@ -1,5 +1,6 @@
 #pragma once
 
+#include "inexor/enumerations/gamemode_bitmask.hpp"
 
 /// structure for game mode description
 static struct gamemodeinfo

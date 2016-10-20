@@ -5,6 +5,7 @@
 
 #include "inexor/templates/databuf.hpp"
 #include "inexor/deprecated/assert.hpp"
+#include "inexor/deprecated/isclass.hpp"
 
 /// 
 template <class T, int MINSIZE = 8> struct vector

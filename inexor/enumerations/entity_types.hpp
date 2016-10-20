@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/enumerations/entity_base_types.hpp"
+
 /// entity types (old Cube2 entity system)
 enum
 {
@@ -41,4 +43,14 @@ enum
     FLAG,
     OBSTACLE = ET_OBSTACLE,
     MAXENTTYPES
+};
+
+/// TODO: separate this from this file?
+enum
+{
+    ENT_PLAYER = 0,
+    ENT_AI,
+    ENT_INANIMATE,
+    ENT_CAMERA,
+    ENT_BOUNCE
 };

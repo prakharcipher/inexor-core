@@ -1,5 +1,24 @@
 #pragma once
 
+#include "inexor/enumerations/gun_ids.hpp"
+#include "inexor/enumerations/entity_types.hpp"
+#include "inexor/enumerations/armor_types.hpp"
+#include "inexor/enumerations/client_states.hpp"
+#include "inexor/enumerations/ai_types.hpp"
+#include "inexor/enumerations/ai_modes.hpp"
+
+#include "inexor/macros/gamemode_macros.hpp"
+#include "inexor/macros/loop_macros.hpp"
+
+#include "inexor/classes/itemstat.hpp"
+
+#include <algorithm>
+using std::min;
+using std::max;
+
+#include "inexor/util/random.hpp"
+using inexor::util::rnd;
+
 /// TODO: document!
 struct fpsstate
 {

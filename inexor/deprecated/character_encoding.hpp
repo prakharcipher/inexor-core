@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inexor/enumerations/console_types.hpp"
+
 extern const uchar cubectype[256];
 static inline int iscubeprint(uchar c) { return cubectype[c]&CT_PRINT; }
 static inline int iscubespace(uchar c) { return cubectype[c]&CT_SPACE; }

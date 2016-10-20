@@ -1,5 +1,8 @@
 #pragma once
 
+#include "inexor/enumerations/sound_ids.hpp"
+#include "inexor/enumerations/hud_icons.hpp"
+
 /// pickup description structure
 static struct itemstat 
 { 

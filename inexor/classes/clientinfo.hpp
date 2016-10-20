@@ -11,13 +11,16 @@
 
 #include <enet/enet.h>
 
+// Extern declaration with no namespaces
+extern ENetPeer *getclientpeer(int i);
+extern void freechallenge(void *answer);
+
 
 namespace server {
 
+    /// Extern declarations
     extern int nextexceeded;
     extern int gamemillis;
-
-    extern void freechallenge(void *answer);
 
     /// 
     struct clientinfo
