@@ -10,7 +10,8 @@ requires = (("Kainjow_Mustache/2.0@a_teammate/stable"),
             ("SDL2_image/2.0.1@lasote/stable"),
             ("CEF/3.2704.1424.gc3f0a5b@a_teammate/testing"),
             ("Protobuf/3.1.0@a_teammate/stable"),
-            ("gRPC/1.1.0-dev@a_teammate/stable"))
+            ("gRPC/1.1.0-dev@a_teammate/stable"),
+            ("ALmixer/0.4.0@a_teammate/testing"))
 
 options = '''
   zlib:shared=False

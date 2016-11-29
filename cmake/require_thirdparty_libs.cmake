@@ -44,6 +44,8 @@ function(require_opengl targ)
   target_link_libraries(${targ} ${OPENGL_LIBS})
 endfunction()
 
+# BOOST
+
 set(BOOST_ROOT ${CONAN_BOOST_ROOT})
 set(BOOST_LIBRARYDIR ${CONAN_LIB_DIRS_BOOST})
 set(BOOST_INCLUDEDIR ${CONAN_INCLUDE_DIRS_BOOST})
@@ -61,8 +63,6 @@ elseif(CMAKE_USE_WIN32_THREADS_INIT)
   add_definitions(-DBOOST_THREAD_WIN32)
   set(Boost_THREADAPI "win32")
 endif()
-# conan: we can override FindBoost
-# include("${CONAN_BOOST_ROOT}/FindBoost.cmake") disable it until we have our runtime chosen.
 
 find_package(Boost REQUIRED
   COMPONENTS
@@ -166,8 +166,8 @@ add_require_conan_lib_function(SDL2)
 # SDL_image (image loader library)
 add_require_conan_lib_function(SDL2_image)
 
-# SDL_mixer (sound library)
-add_require_conan_lib_function(SDL2_mixer)
+# ALmixer (sound library)
+add_require_conan_lib_function(ALmixer)
 
 ## Wrapper for all SDL libs (you usually want all of them)
 function(require_sdl targ)
@@ -183,6 +183,6 @@ function(require_sdl targ)
 #  endif()
   require_sdl2(${targ})
   require_sdl2_image(${targ})
-  require_sdl2_mixer(${targ})
+  require_almixer(${targ})
   require_opengl(${targ})
 endfunction()
