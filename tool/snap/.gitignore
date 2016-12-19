@@ -1,0 +1,7 @@
+# Ignore all snapcraft files except parts/plugins
+parts
+!/parts/plugins
+/parts/plugins/*
+prime
+stage
+
