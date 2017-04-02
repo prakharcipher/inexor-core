@@ -168,6 +168,7 @@ add_require_conan_lib_function(SDL2_image)
 
 # ALmixer (sound library)
 add_require_conan_lib_function(ALmixer)
+add_require_conan_lib_function(openal-soft)
 
 ## Wrapper for all SDL libs (you usually want all of them)
 function(require_sdl targ)
