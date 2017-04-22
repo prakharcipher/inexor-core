@@ -81,9 +81,7 @@ extern size_t fixpackagedir(char *dir);
 extern const char *sethomedir(const char *dir);
 extern const char *addpackagedir(const char *dir);
 extern const char *findfile(const char *filename, const char *mode);
-extern bool findzipfile(const char *filename);
 extern stream *openrawfile(const char *filename, const char *mode);
-extern stream *openzipfile(const char *filename, const char *mode);
 extern stream *openfile(const char *filename, const char *mode);
 extern stream *opentempfile(const char *filename, const char *mode);
 extern stream *opengzfile(const char *filename, const char *mode, stream *file = NULL, int level = Z_BEST_COMPRESSION);
@@ -91,5 +89,4 @@ extern stream *openutf8file(const char *filename, const char *mode, stream *file
 extern char *loadfile(const char *fn, size_t *size, bool utf8 = true);
 extern bool listdir(const char *dir, bool rel, const char *ext, vector<char *> &files);
 extern int listfiles(const char *dir, const char *ext, vector<char *> &files);
-extern int listzipfiles(const char *dir, const char *ext, vector<char *> &files);
 
