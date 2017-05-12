@@ -3,7 +3,7 @@
 #include "inexor/util/Logging.hpp"
 #include "inexor/fpsgame/entities.hpp"
 #include "inexor/network/legacy/crypto.hpp"
-#include "inexor/server/client_managment.hpp"
+#include "inexor/server/client_management.hpp"
 
 namespace server
 {
