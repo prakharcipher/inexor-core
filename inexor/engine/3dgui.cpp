@@ -1419,3 +1419,7 @@ void consolebox(int x1, int y1, int x2, int y2)
     pophudmatrix();
 }
 
+int g3d_callback::starttime()
+{
+    return totalmillis;
+}

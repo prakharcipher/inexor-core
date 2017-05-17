@@ -1,6 +1,7 @@
 #pragma once
 
-#include "inexor/texture/texture.hpp" // for Texture and Image
+#include "inexor/texture/slot.hpp" // for Texture and Image and Slot
+#include "inexor/shared/cube_formatting.hpp"
 
 /// enumeration for icons
 enum
@@ -99,7 +100,7 @@ struct g3d_callback
 {
     virtual ~g3d_callback() {}
 
-    int starttime() { return totalmillis; }
+    int starttime();
 
     virtual void gui(g3d_gui &g, bool firstpass) = 0;
 };
