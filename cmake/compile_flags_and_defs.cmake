@@ -156,7 +156,8 @@ message(STATUS "EXE_LINKER_FLAGS_RELEASE:       ${CMAKE_EXE_LINKER_FLAGS_RELEASE
 add_definitions(-D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS)
 
 # -D_USE_MATH_DEFINES                   = By defining this prior to math.h we get M_PI defined
-add_definitions(-D_USE_MATH_DEFINES)
+# -DHAVE_M_PI                           = This is for SDL to not try to define M_PI
+add_definitions(-D_USE_MATH_DEFINES -DHAVE_M_PI)
   
 if(OS_POSIX)
   # Allow the Large File Support (LFS) interface to replace the old interface.
