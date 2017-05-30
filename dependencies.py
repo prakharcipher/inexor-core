@@ -8,6 +8,7 @@ requires = (("InexorGlueGen/0.6.0alpha@inexorgame/testing"),
             ("gtest/1.7.0@lasote/stable"),
             ("ENet/1.3.13@inexorgame/stable"),
             ("spdlog/latest@signal9/stable"),
+            ("fmt/latest@signal9/stable"),
             ("SDL2/2.0.5@lasote/stable"),
             ("SDL2_image/2.0.1@lasote/stable"),
             ("CEF/3.2704.1424.gc3f0a5b@inexorgame/stable")
