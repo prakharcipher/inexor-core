@@ -228,6 +228,13 @@ build() {
   )
 }
 
+## Find the package we created previously and echo it.
+echo_package_file() {
+  
+  echo >&2 'Note: searching for "/tmp/inexor-build/Inexor-*.zip"'
+  find . -name '/tmp/inexor-build/Inexor-*.zip' >&2
+}
+
 run_tests() {
   if contains "$TARGET" linux; then
     "${bin}/unit_tests"
@@ -262,6 +269,7 @@ target_script() {
 # Upload nightly
 target_after_success() {
   if test "$TARGET" != apidoc; then
+    echo_package_file
     external_pull_request || nigthly_build || true
   fi
   exit 0
