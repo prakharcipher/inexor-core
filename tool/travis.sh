@@ -232,7 +232,9 @@ build() {
 echo_package_file() {
   
   echo >&2 'Note: searching for "/tmp/inexor-build/Inexor-*.zip"'
-  find . -wholename '/tmp/inexor-build/Inexor-*.zip' >&2
+  find "/tmp/inexor-build/" -name 'Inexor-*.zip' >&2
+  echo >&2 'take 2"'
+  find "/tmp/inexor-build/" -name 'Inexor-*.zip'
 }
 
 run_tests() {
