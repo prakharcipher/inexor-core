@@ -231,15 +231,7 @@ build() {
 ## Find the package we created previously and echo it.
 echo_package_file() {
   echo >&2 'Note: searching for "/tmp/inexor-build/Inexor-*.zip"'
-  find "/tmp/inexor-build/" -name 'Inexor-*.zip' >&2
-  echo >&2 'take 2'
-  find "/tmp/inexor-build/" -name 'Inexor-*.zip'
-  echo >&2 'take 3'
-  find "/" -name 'Inexor-*.zip'
-  echo >&2 'take 4'
-  find "/" -name '*nexor-*.zip'
-  echo >&2 'take 4b'
-  find "/" -name '*nexor-*.zip' >&2
+
   echo >&2 "take 5: Travis build dir: $TRAVIS_BUILD_DIR"
   find "$TRAVIS_BUILD_DIR" -name '*nexor-*.zip'  >&2
   echo >&2 "take 6: Travis build dir: $TRAVIS_BUILD_DIR"
