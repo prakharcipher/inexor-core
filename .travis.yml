@@ -85,4 +85,4 @@ jobs:
     skip_cleanup: true
     GITHUB_TOKEN: ${GITHUB_TOKEN}
     on:
-      branch master
+      branch upload_apidocs
