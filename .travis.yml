@@ -73,16 +73,16 @@ deploy:
 
 jobs:
   include:
-    - stage: gh_pages_docs
-    addons:
-      apt:
-        packages:
-          - doxygen
-          - doxygen-doc
-          - doxygen-latex
-          - doxygen-gui
-    script: ./deploy_documentation.sh
-    skip_cleanup: true
-    GITHUB_TOKEN: ${GITHUB_TOKEN}
-    on:
-      branch upload_apidocs
+    - stage: docs
+      addons:
+        apt:
+          packages:
+            - doxygen
+            - doxygen-doc
+            - doxygen-latex
+            - doxygen-gui
+      script: ./deploy_documentation.sh
+      skip_cleanup: true
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      on:
+        branch upload_apidocs
