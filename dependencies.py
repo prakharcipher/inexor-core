@@ -6,6 +6,7 @@ requires = (("InexorGlueGen/0.6.0alpha@inexorgame/stable"),
             ("zlib/1.2.11@lasote/stable"),
             ("gtest/1.8.0@lasote/stable"),
             ("ENet/1.3.13@inexorgame/stable"),
+            ("glm/0.9.8.5@g-truc/stable"),
             ("spdlog/0.13.0@memsharded/stable"),
             ("fmt/3.0.1@memsharded/stable"),
             ("SDL2/2.0.5@lasote/testing"),  # not self-contained

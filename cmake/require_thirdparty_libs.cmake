@@ -151,6 +151,9 @@ add_require_conan_lib_function(spdlog)
 # fmt (fast and convenient formatting library)
 add_require_conan_lib_function(fmt)
 
+# glm (OpenGL like Math library)
+add_require_conan_lib_function(glm)
+
 # CEF Chromium Embedded Framework (Embedded Browser used for the UI)
 add_require_conan_lib_function(CEF)
 
